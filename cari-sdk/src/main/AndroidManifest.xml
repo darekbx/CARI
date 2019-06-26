@@ -1,2 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.darekbx.cari" />
+    package="com.darekbx.cari">
+    <application>
+        <activity
+            android:name=".sdk.internal.bubble.BubbleActivity"
+            android:allowEmbedded="true"
+            android:documentLaunchMode="always"
+            android:resizeableActivity="true"
+            />
+    </application>
+</manifest>
