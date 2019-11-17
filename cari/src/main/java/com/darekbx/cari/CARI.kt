@@ -25,7 +25,7 @@ object CARI {
 
 
                 // computation
-                val result = ""
+                val result = "Computation result"
 
 
                 val encodedResult = CompressionUtil.encodeData(result)

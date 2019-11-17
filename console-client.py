@@ -2,7 +2,8 @@
 import socket
 import subprocess
 import base64
-import zlib
+import gzip
+
 
 '''
 Console
@@ -54,12 +55,12 @@ class CARIClient:
 
     def encode_data(self, data):
         data = data.encode(self.ENCODING)
-        compressed = zlib.compress(data)
-        return base64.b64encode(compressed)\
+        compressed = gzip.compress(data)
+        return base64.b64encode(compressed).decode(self.ENCODING)
     
     def decode_data(self, data):
         data_bytes = base64.b64decode(data.decode(self.ENCODING))
-        decompressed = zlib.decompress(data_bytes)
+        decompressed = gzip.decompress(data_bytes)
         return decompressed
 
 client = CARIClient()
