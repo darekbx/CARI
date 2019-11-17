@@ -1,4 +1,4 @@
-package com.socketserver
+package com.darekbx.cari.testapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

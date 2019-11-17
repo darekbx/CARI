@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import socket
 import subprocess
+import base64
+import zlib
 
 '''
 Console
@@ -36,14 +38,29 @@ class CARIClient:
         portForward = "tcp:{0}".format(self.PORT)
         subprocess.run(["adb", "forward", portForward, portForward])
 
-    def write_and_receive(self, value):
+    def write_and_receive(self, command):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            value = "{0}{1}".format(value, self.LINE_ENDING)
             s.connect((self.HOST, self.PORT))
-            s.send(bytes(value, self.ENCODING))
-            data = s.recv(1024)
+
+            encoded_value = self.encode_data(command)
+            encoded_value = "{0}{1}".format(encoded_value, self.LINE_ENDING)
+            s.send(bytes(encoded_value, self.ENCODING))
+
+            encoded_response = s.recv(1024)
+            response = self.decode_data(encoded_response)
+            
             s.close()
-            return str(data, self.ENCODING).strip()
+            return str(response, self.ENCODING).strip()
+
+    def encode_data(self, data):
+        data = data.encode(self.ENCODING)
+        compressed = zlib.compress(data)
+        return base64.b64encode(compressed)\
+    
+    def decode_data(self, data):
+        data_bytes = base64.b64decode(data.decode(self.ENCODING))
+        decompressed = zlib.decompress(data_bytes)
+        return decompressed
 
 client = CARIClient()
 output = client.write_and_receive("Execute command")

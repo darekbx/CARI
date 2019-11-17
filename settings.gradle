@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':cari'
 rootProject.name='SocketServer'
