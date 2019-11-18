@@ -1,4 +1,4 @@
-package com.darekbx.cari.internal
+package com.darekbx.cari.internal.communication
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,14 +27,11 @@ internal class SocketCommunication(val port: Int) {
 
                 val input = socketRead.getInputStream()
                 val outputWriter = PrintWriter(socketRead.getOutputStream(), true)
-
                 val inputReader = InputStreamReader(input, CHARSET)
                 val bufferedReader = BufferedReader(inputReader)
 
                 val receivedData = bufferedReader.readLine()
-
                 val dataToWrite = callback?.invoke(receivedData)
-
                 outputWriter.println(dataToWrite)
 
                 inputReader.close()

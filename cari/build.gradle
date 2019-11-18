@@ -5,7 +5,6 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.1"
 
-
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 29
@@ -22,6 +21,11 @@ android {
         }
     }
 
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -31,6 +35,8 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1"
+    implementation 'com.google.code.gson:gson:2.8.6'
 
+    testImplementation 'org.robolectric:robolectric:4.3'
     testImplementation 'junit:junit:4.12'
 }
