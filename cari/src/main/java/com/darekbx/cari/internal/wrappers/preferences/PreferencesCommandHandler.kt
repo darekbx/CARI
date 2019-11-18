@@ -4,20 +4,23 @@ import android.content.Context
 import com.darekbx.cari.internal.model.CommandWrapper
 import com.darekbx.cari.internal.wrappers.BaseCommandHandler
 
-internal class PreferencesCommandHandler(context: Context)  : BaseCommandHandler(context) {
+internal class PreferencesCommandHandler(val context: Context)  : BaseCommandHandler() {
 
-    val EMPTY_RESPONSE = ""
+    private val RESOURCE_NAME = "prefs"
 
     override fun handleCommand(commandString: String): Any {
         val command = parseCommand(commandString)
-        val argsCount = command.arguments.size
-        return when (command.command) {
-            "ls", "list" -> handleList()
-            "get" -> handleGet(argsCount, command)
-            "set" -> handleSet(argsCount, command)
-            "rm", "remove" -> handleRemove(argsCount, command)
-            else -> false
+        if (command.resource == RESOURCE_NAME) {
+            val argsCount = command.arguments.size
+            return when (command.command) {
+                "ls", "list" -> handleList()
+                "get" -> handleGet(argsCount, command)
+                "set" -> handleSet(argsCount, command)
+                "rm", "remove" -> handleRemove(argsCount, command)
+                else -> false
+            }
         }
+        return false
     }
 
     private fun handleList(): String {
