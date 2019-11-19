@@ -4,7 +4,7 @@ import android.content.Context
 import com.darekbx.cari.internal.model.CommandWrapper
 import com.darekbx.cari.internal.wrappers.BaseCommandHandler
 
-internal class PreferencesCommandHandler(val context: Context)  : BaseCommandHandler() {
+internal class PreferencesCommandHandler(val context: Context) : BaseCommandHandler() {
 
     private val RESOURCE_NAME = "prefs"
 
