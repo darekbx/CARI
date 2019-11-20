@@ -1,5 +1,6 @@
 package com.darekbx.cari.internal.wrappers
 
+import android.util.Log
 import com.darekbx.cari.internal.model.CommandWrapper
 import com.darekbx.cari.internal.model.ErrorWrapper
 import com.google.gson.Gson
