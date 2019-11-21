@@ -36,6 +36,7 @@ class CARIClient:
 
     def __init__(self):
         self.forward_port()
+        print("CARI Console Android Resource Inspector")
 
 
     def execute(self):
@@ -43,43 +44,45 @@ class CARIClient:
         args_count = len(sys.argv)
         if args_count > 1:
             resource = sys.argv[1]
-            command = sys.argv[2]
-
-            data = ""
 
             if resource == "prefs":
-
-                if args_count == 3 and command == "scopes":
-                    data = self.create_command_prefs(resource, command)
-
-                if args_count == 4 and command == "list":
-                    scope = sys.argv[3]
-                    arguments = [{"option":scope}]
-                    data = self.create_command_prefs(resource, command, arguments)
-
-                if args_count == 5 and command == "get":
-                    scope = sys.argv[3]
-                    key = sys.argv[4]
-                    arguments = [{"option":scope},{"option":key}]
-                    data = self.create_command_prefs(resource, command, arguments)
-
-                if args_count == 6 and command == "set":
-                    scope = sys.argv[3]
-                    key = sys.argv[4]
-                    value = sys.argv[5]
-                    arguments = [{"option":scope},{"option":key},{"option":value}]
-                    data = self.create_command_prefs(resource, command, arguments)
-
-                if args_count == 5 and command == "remove":
-                    scope = sys.argv[3]
-                    key = sys.argv[4]
-                    arguments = [{"option":scope},{"option":key}]
-                    data = self.create_command_prefs(resource, command, arguments)
-
-                data_json = json.dumps(data)
-                result = self.write_and_receive(data_json)
+                result = self.handle_prefs()
 
         print(result)
+
+    def handle_prefs(self):
+        args_count = len(sys.argv)
+        resource = "prefs"
+        command = sys.argv[2]
+        if args_count == 3 and command == "scopes":
+            data = self.create_command_prefs(resource, command)
+
+        if args_count == 4 and command == "list":
+            scope = sys.argv[3]
+            arguments = [{"option":scope}]
+            data = self.create_command_prefs(resource, command, arguments)
+
+        if args_count == 5 and command == "get":
+            scope = sys.argv[3]
+            key = sys.argv[4]
+            arguments = [{"option":scope},{"option":key}]
+            data = self.create_command_prefs(resource, command, arguments)
+
+        if args_count == 6 and command == "set":
+            scope = sys.argv[3]
+            key = sys.argv[4]
+            value = sys.argv[5]
+            arguments = [{"option":scope},{"option":key},{"option":value}]
+            data = self.create_command_prefs(resource, command, arguments)
+
+        if args_count == 5 and command == "remove":
+            scope = sys.argv[3]
+            key = sys.argv[4]
+            arguments = [{"option":scope},{"option":key}]
+            data = self.create_command_prefs(resource, command, arguments)
+
+        data_json = json.dumps(data)
+        return self.write_and_receive(data_json)
 
     def create_command_prefs(self, resource, command, arguments = []):
         data = {
@@ -119,38 +122,3 @@ class CARIClient:
 
 client = CARIClient()
 client.execute()
-'''
-command_scopes = {
-    "resource": "prefs",
-    "command": "scopes",
-    "arguments": [ ]
-}
-
-command_keys = {
-    "resource": "prefs",
-    "command": "ls",
-    "arguments": [
-        {
-            "option": "app_preferences",
-            "value": ""
-        }
-    ]
-}
-command_get = {
-    "resource": "prefs",
-    "command": "get",
-    "arguments": [
-        {
-            "option": "app_preferences",
-            "value": ""
-        },
-        {
-            "option": "test_key_1",
-            "value": ""
-        }
-    ]
-}
-
-
-output = client.write_and_receive(json.dumps(command_get))
-'''

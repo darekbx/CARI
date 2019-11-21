@@ -1,11 +1,18 @@
 package com.darekbx.cari
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
+import android.widget.RemoteViews
+import androidx.core.app.NotificationCompat
 import com.darekbx.cari.internal.communication.CompressionUtil
 import kotlinx.coroutines.Job
 
 import com.darekbx.cari.internal.communication.SocketCommunication
 import com.darekbx.cari.internal.model.ErrorWrapper
+import com.darekbx.cari.internal.notification.Notifications
 import com.darekbx.cari.internal.wrappers.preferences.PreferencesCommandHandler
 import com.darekbx.cari.internal.wrappers.sqlite.SqliteCommandHandler
 import com.google.gson.Gson
@@ -23,6 +30,11 @@ object CARI {
      */
     fun initialize(context: Context, options: Options = Options()): Job {
 
+
+        // Test
+        Notifications(context).displayNotification()
+
+
         val preferencesCommandHandler = PreferencesCommandHandler(context)
         val sqliteCommandHandler = SqliteCommandHandler(context)
 
@@ -36,6 +48,7 @@ object CARI {
 
         return socketCommunication.supervisiorJob
     }
+
 
     private fun handleCommand(
         encodedCommand: String,
