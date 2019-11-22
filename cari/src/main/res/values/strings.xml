@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">CARI</string>
+    <string name="notification_active">CARI is active</string>
     <string name="notification_channel_name">CARI Notification</string>
 </resources>

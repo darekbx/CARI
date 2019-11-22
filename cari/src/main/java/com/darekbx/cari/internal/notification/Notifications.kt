@@ -4,6 +4,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -23,6 +24,9 @@ internal class Notifications(val context: Context) {
         val packageName = context.packageName
         val layout = RemoteViews(packageName, R.layout.layout_notification_small)
         val layoutExpanded = RemoteViews(packageName, R.layout.layout_notification_large)
+
+        layoutExpanded.setOnClickFillInIntent(R.id.button_back, null)
+        layoutExpanded.setRemoteAdapter(R.id.items_list, Intent(context, ListService::class.java))
 
         val customNotification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_tree)

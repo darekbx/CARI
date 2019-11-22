@@ -14,6 +14,7 @@ internal class PreferencesCommandHandler(val context: Context) : BaseCommandHand
         if (command.resource == RESOURCE_NAME) {
             val argsCount = command.arguments.size
             return when (command.command) {
+                "dump" -> handleDump()
                 "scopes" -> handleScopes()
                 "ls", "list" -> handleList(argsCount, command)
                 "get" -> handleGet(argsCount, command)
@@ -25,9 +26,26 @@ internal class PreferencesCommandHandler(val context: Context) : BaseCommandHand
         return false
     }
 
+    private fun handleDump(): String {
+        val scopes = preferencesWrapper.listScopes()
+        val result = mutableMapOf<String, MutableMap<String, String>>()
+
+        scopes.forEach { scope ->
+            val scopeMap = mutableMapOf<String, String>()
+            val keys = preferencesWrapper.listKeys(scope)
+            keys.forEach { key ->
+                val value = preferencesWrapper.getValue(scope, key)
+                scopeMap.put(key, value ?: NULL_VALUE)
+            }
+            result.put(scope, scopeMap)
+        }
+
+        return createResponse(result)
+    }
+
     private fun handleScopes(): String {
-        val keys = preferencesWrapper.listScopes()
-        return createResponse(keys)
+        val scopes = preferencesWrapper.listScopes()
+        return createResponse(scopes)
     }
 
     private fun handleList(argsCount: Int, command: CommandWrapper) =

@@ -8,6 +8,7 @@ import json
 
 
 '''
+CARI
 Console
 Android
 Resources
@@ -18,7 +19,6 @@ Client used to communicate with Android device
 
 TODO:
 ability to set port from parameters
-check if device is available
 handle connection errors
 
 '''
@@ -38,22 +38,31 @@ class CARIClient:
         self.forward_port()
         print("CARI Console Android Resource Inspector")
 
+    def count_connected_devices(self):
+        output = subprocess.check_output(["adb", "devices"])
+        lines = output.decode("UTF-8").strip().splitlines()
+        filtered = [line for line in lines if "\tdevice" in line]
+        return len(filtered)
 
     def execute(self):
-        result = ""
-        args_count = len(sys.argv)
-        if args_count > 1:
-            resource = sys.argv[1]
-
-            if resource == "prefs":
-                result = self.handle_prefs()
-
-        print(result)
+        if self.count_connected_devices() == 1:
+            result = ""
+            args_count = len(sys.argv)
+            if args_count > 1:
+                resource = sys.argv[1]
+                if resource == "prefs":
+                    result = self.handle_prefs()
+            print(result)
+        else:
+            print("No connected devices, or connected too many devices")
 
     def handle_prefs(self):
         args_count = len(sys.argv)
         resource = "prefs"
         command = sys.argv[2]
+        if args_count == 3 and command == "dump":
+            data = self.create_command_prefs(resource, command)
+
         if args_count == 3 and command == "scopes":
             data = self.create_command_prefs(resource, command)
 
@@ -82,7 +91,10 @@ class CARIClient:
             data = self.create_command_prefs(resource, command, arguments)
 
         data_json = json.dumps(data)
-        return self.write_and_receive(data_json)
+        output_json = self.write_and_receive(data_json)
+
+        formatted = self.pretty_json(output_json)
+        print(formatted)
 
     def create_command_prefs(self, resource, command, arguments = []):
         data = {
@@ -91,6 +103,10 @@ class CARIClient:
             "arguments": arguments
         }
         return data
+
+    def pretty_json(self, output_json):
+        parsed = json.loads(output_json)
+        return json.dumps(parsed, indent=4, sort_keys=True)
 
     def forward_port(self):
         portForward = "tcp:{0}".format(self.PORT)
