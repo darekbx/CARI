@@ -1,6 +1,5 @@
 package com.darekbx.cari.internal.wrappers
 
-import android.util.Log
 import com.darekbx.cari.internal.model.CommandWrapper
 import com.darekbx.cari.internal.model.ErrorWrapper
 import com.google.gson.Gson
@@ -11,8 +10,8 @@ internal abstract class BaseCommandHandler {
 
     abstract fun handleCommand(commandString: String): Any
 
-    protected fun parseCommand(commandString: String) : CommandWrapper {
-        return gson.fromJson(commandString,  CommandWrapper::class.java)
+    protected fun parseCommand(commandString: String): CommandWrapper {
+        return gson.fromJson(commandString, CommandWrapper::class.java)
     }
 
     protected fun createResponse(response: Any): String {

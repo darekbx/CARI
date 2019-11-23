@@ -1,18 +1,12 @@
 package com.darekbx.cari
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
-import android.widget.RemoteViews
-import androidx.core.app.NotificationCompat
 import com.darekbx.cari.internal.communication.CompressionUtil
 import kotlinx.coroutines.Job
 
 import com.darekbx.cari.internal.communication.SocketCommunication
 import com.darekbx.cari.internal.model.ErrorWrapper
-import com.darekbx.cari.internal.notification.Notifications
+import com.darekbx.cari.internal.wrappers.BaseCommandHandler
 import com.darekbx.cari.internal.wrappers.preferences.PreferencesCommandHandler
 import com.darekbx.cari.internal.wrappers.sqlite.SqliteCommandHandler
 import com.google.gson.Gson
@@ -30,18 +24,16 @@ object CARI {
      */
     fun initialize(context: Context, options: Options = Options()): Job {
 
-
-        // Test
-        Notifications(context).displayNotification()
-
-
-        val preferencesCommandHandler = PreferencesCommandHandler(context)
-        val sqliteCommandHandler = SqliteCommandHandler(context)
+        val commandHandlers = listOf(
+            PreferencesCommandHandler(context),
+            SqliteCommandHandler(context)
+        )
 
         val port = options.port
         val socketCommunication = SocketCommunication(port).apply {
             callback = { encodedCommand ->
-                handleCommand(encodedCommand, preferencesCommandHandler, sqliteCommandHandler)
+                val command = CompressionUtil.decodeData(encodedCommand)
+                handleCommand(command, commandHandlers)
             }
             start()
         }
@@ -49,24 +41,13 @@ object CARI {
         return socketCommunication.supervisiorJob
     }
 
-
-    private fun handleCommand(
-        encodedCommand: String,
-        preferencesCommandHandler: PreferencesCommandHandler,
-        sqliteCommandHandler: SqliteCommandHandler
-    ): String {
-        val command = CompressionUtil.decodeData(encodedCommand)
-
-        val preferencesResult = preferencesCommandHandler.handleCommand(command)
-        if (preferencesResult is String) {
-            return CompressionUtil.encodeData(preferencesResult)
+    private fun handleCommand(command: String, handlers: List<BaseCommandHandler>): String {
+        handlers.forEach {  commandHandler ->
+            val result = commandHandler.handleCommand(command)
+            if (result is String) {
+                return CompressionUtil.encodeData(result)
+            }
         }
-
-        val sqliteResult = sqliteCommandHandler.handleCommand(command)
-        if (sqliteResult is String) {
-            return CompressionUtil.encodeData(sqliteResult)
-        }
-
         return notifyError()
     }
 
