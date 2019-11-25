@@ -71,7 +71,7 @@ internal class PreferencesCommandHandler(val context: Context) : BaseCommandHand
 
     private fun handleSet(argsCount: Int, command: CommandWrapper) =
         when (argsCount) {
-            2 -> {
+            3 -> {
                 val scope = command.arguments.get(0)
                 val key = command.arguments.get(1)
                 val value = command.arguments.get(2)
@@ -83,7 +83,7 @@ internal class PreferencesCommandHandler(val context: Context) : BaseCommandHand
 
     private fun handleRemove(argsCount: Int, command: CommandWrapper) =
         when (argsCount) {
-            1 -> {
+            2 -> {
                 val scope = command.arguments.get(0)
                 val key = command.arguments.get(1)
                 preferencesWrapper.remove(scope.option, key.option)
