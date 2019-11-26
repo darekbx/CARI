@@ -5,6 +5,7 @@ import subprocess
 import base64
 import gzip
 import json
+import argparse
 
 '''
 CARI
@@ -16,9 +17,33 @@ Inspector
 Client used to communicate with Android device
 
 
+Instruction:
+Run: python3 cari-client.py
+
+Options:
+-d provide device for use
+-p provide custom port for forward, default is 38300
+-r provide resource with 
+Dump preferences: python3 cari-client.py prefs dump
+                  python3 cari-client.py -d device -r prefs dump
+                  python3 cari-client.py -d device -p 4000 -r prefs dump
+
+
 TODO:
 handle connection errors
 '''
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-d', '--device', help="select device to use")
+parser.add_argument('-p', '--port', help="select adb port to forward")
+
+args = parser.parse_args()
+
+print(args.device)
+
+
+
 
 class SqliteResource:
 
@@ -94,7 +119,8 @@ class ArgumentsHandler:
 
     def process(self):
         args_count = len(sys.argv)
-        if self.count_connected_devices() == 1:
+        devices_count = self.count_connected_devices()
+        if devices_count > 0:
             port = None
             arguments_offset = 1
             if args_count > 1:
@@ -112,7 +138,7 @@ class ArgumentsHandler:
             else:
                 print("Unknown command, run with -h or --help for more information")
         else:
-            print("No connected devices, or connected too many devices")
+            print("No connected devices")
 
     def handle_resource(self, resource, arguments_offset):
         if resource == PreferencesResource.RESOURCE:
@@ -190,4 +216,4 @@ class CARIClient:
 
 
 client = CARIClient()
-client.execute()
+#client.execute()
