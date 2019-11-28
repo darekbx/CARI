@@ -23,26 +23,15 @@ Run: python3 cari-client.py
 Options:
 -d provide device for use
 -p provide custom port for forward, default is 38300
--r provide resource with 
-Dump preferences: python3 cari-client.py prefs dump
-                  python3 cari-client.py -d device -r prefs dump
-                  python3 cari-client.py -d device -p 4000 -r prefs dump
+-a provide action 
+Dump preferences: python3 cari-client.py -a prefs dump
+                  python3 cari-client.py -d device -a prefs dump
+                  python3 cari-client.py -d device -p 4000 -a prefs dump
 
 
 TODO:
 handle connection errors
 '''
-
-
-parser = argparse.ArgumentParser()
-parser.add_argument('-d', '--device', help="select device to use")
-parser.add_argument('-p', '--port', help="select adb port to forward")
-
-args = parser.parse_args()
-
-print(args.device)
-
-
 
 
 class SqliteResource:
@@ -62,35 +51,35 @@ class PreferencesResource:
 
     def handle_resource(self, args):
         args_count = len(args)
-        command = args[0]
+        command = args[1]
         request = None
-        if args_count == 1 and command == "dump":
+        if args_count == 2 and command == "dump":
             request = self.create_command_prefs(command)
 
-        if args_count == 1 and command == "scopes":
+        if args_count == 2 and command == "scopes":
             request = self.create_command_prefs(command)
 
-        if args_count == 2 and command == "list":
-            scope = args[1]
+        if args_count == 3 and (command == "list" or command == "ls"):
+            scope = args[2]
             arguments = [{"option":scope}]
             request = self.create_command_prefs(command, arguments)
 
-        if args_count == 3 and command == "get":
-            scope = args[1]
-            key = args[2]
+        if args_count == 4 and command == "get":
+            scope = args[2]
+            key = args[3]
             arguments = [{"option":scope},{"option":key}]
             request = self.create_command_prefs(command, arguments)
 
-        if args_count == 4 and command == "set":
-            scope = args[1]
-            key = args[2]
-            value = args[3]
+        if args_count == 5 and command == "set":
+            scope = args[2]
+            key = args[3]
+            value = args[4]
             arguments = [{"option":scope},{"option":key},{"option":value}]
             request = self.create_command_prefs(command, arguments)
 
-        if args_count == 3 and command == "remove":
-            scope = args[1]
-            key = args[2]
+        if args_count == 4 and (command == "remove" or command == "rm"):
+            scope = args[2]
+            key = args[3]
             arguments = [{"option":scope},{"option":key}]
             request = self.create_command_prefs(command, arguments)
 
@@ -118,35 +107,31 @@ class ArgumentsHandler:
         return len(filtered)
 
     def process(self):
-        args_count = len(sys.argv)
+        parser = argparse.ArgumentParser()
+        parser.add_argument('-d', '--device', help="select device to use")
+        parser.add_argument('-p', '--port', help="select adb port to forward")
+        parser.add_argument('-a', '--action', nargs='*', help="action to execute")
+        args = parser.parse_args()
+
         devices_count = self.count_connected_devices()
         if devices_count > 0:
             port = None
-            arguments_offset = 1
-            if args_count > 1:
 
-                if self.PORT_ARGUMENT in sys.argv[1] and args_count > 3:
-                    arguments_offset = 3
-                    port = sys.argv[2]
+            if args.port is not None:
+                port = args.port
 
-                if args_count > arguments_offset + 1:
-                    resource = sys.argv[arguments_offset]
-                    request = self.handle_resource(resource, arguments_offset)
-                    return port, request
-                else:
-                    print("Unknown command, run with -h or --help for more information")
-            else:
-                print("Unknown command, run with -h or --help for more information")
+            if args.action is not None:
+                request = self.handle_resource(args.action)
+                return port, request
         else:
             print("No connected devices")
 
-    def handle_resource(self, resource, arguments_offset):
+    def handle_resource(self, action):
+        resource = action[0]
         if resource == PreferencesResource.RESOURCE:
-            args = sys.argv[(arguments_offset + 1):]
-            return self.preferences_resource.handle_resource(args)
+            return self.preferences_resource.handle_resource(action)
         elif resource == SqliteResource.RESOURCE:
-            args = sys.argv[(arguments_offset + 1):]
-            return self.sqlite_resource.handle_resource(args)
+            return self.sqlite_resource.handle_resource(action)
 
 
 class CARIClient:
@@ -216,4 +201,4 @@ class CARIClient:
 
 
 client = CARIClient()
-#client.execute()
+client.execute()
