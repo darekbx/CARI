@@ -6,6 +6,7 @@ import base64
 import gzip
 import json
 import argparse
+from cmd import Cmd
 
 '''
 CARI
@@ -132,7 +133,10 @@ class ArgumentsHandler:
             return self.preferences_resource.handle_resource(action)
         elif resource == SqliteResource.RESOURCE:
             return self.sqlite_resource.handle_resource(action)
-
+ 
+class CmdPrompt(Cmd):
+    def do_exit(self, inp):
+        return True
 
 class CARIClient:
 
@@ -157,13 +161,18 @@ class CARIClient:
         if port is None:
             port = self.PORT
 
+
+        # TODO: run cmd prompt for further commands
+        CmdPrompt().cmdloop()
+
+        '''
         request_json = json.dumps(request)
         output_json = self.write_and_receive(request_json, port)
         if output_json:
             formatted = self.pretty_json(output_json)
             print(formatted)
         else:
-            print("Response is malformed: '{0}'".format(output_json))
+            print("Response is malformed: '{0}'".format(output_json))'''
 
     def pretty_json(self, output_json):
         parsed = json.loads(output_json)
@@ -202,3 +211,4 @@ class CARIClient:
 
 client = CARIClient()
 client.execute()
+
