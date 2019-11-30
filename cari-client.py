@@ -96,11 +96,6 @@ class PreferencesResource:
 
 class ArgumentsHandler:
 
-    PORT_ARGUMENT = "--port"
-
-    preferences_resource = PreferencesResource()
-    sqlite_resource = SqliteResource()
-
     def count_connected_devices(self):
         output = subprocess.check_output(["adb", "devices"])
         lines = output.decode("UTF-8").strip().splitlines()
@@ -111,21 +106,30 @@ class ArgumentsHandler:
         parser = argparse.ArgumentParser()
         parser.add_argument('-d', '--device', help="select device to use")
         parser.add_argument('-p', '--port', help="select adb port to forward")
-        parser.add_argument('-a', '--action', nargs='*', help="action to execute")
         args = parser.parse_args()
 
         devices_count = self.count_connected_devices()
         if devices_count > 0:
-            port = None
-
-            if args.port is not None:
-                port = args.port
-
-            if args.action is not None:
-                request = self.handle_resource(args.action)
-                return port, request
+            if devices_count > 1 and args.device is None:
+                print("Please specify device to use")
+            port = args.port
+            device = args.device
+            return port, device
         else:
             print("No connected devices")
+ 
+class CmdPrompt(Cmd):
+
+    preferences_resource = PreferencesResource()
+    sqlite_resource = SqliteResource()
+
+
+    def do_exit(self, inp):
+        return True
+
+    def do_res(self, arg):
+        request = self.handle_resource(arg)
+        # TODO callback to execute?
 
     def handle_resource(self, action):
         resource = action[0]
@@ -133,10 +137,6 @@ class ArgumentsHandler:
             return self.preferences_resource.handle_resource(action)
         elif resource == SqliteResource.RESOURCE:
             return self.sqlite_resource.handle_resource(action)
- 
-class CmdPrompt(Cmd):
-    def do_exit(self, inp):
-        return True
 
 class CARIClient:
 
@@ -156,23 +156,26 @@ class CARIClient:
         print("CARI Console Android Resource Inspector")
 
     def execute(self):
-        port, request = self.arguments_handler.process()
+        port, device = self.arguments_handler.process()
 
         if port is None:
             port = self.PORT
 
+        # TODO adb forward with device?
 
         # TODO: run cmd prompt for further commands
         CmdPrompt().cmdloop()
 
-        '''
+        action = ""
+        request = "" #self.handle_resource(action)
+
         request_json = json.dumps(request)
         output_json = self.write_and_receive(request_json, port)
         if output_json:
             formatted = self.pretty_json(output_json)
             print(formatted)
         else:
-            print("Response is malformed: '{0}'".format(output_json))'''
+            print("Response is malformed: '{0}'".format(output_json))
 
     def pretty_json(self, output_json):
         parsed = json.loads(output_json)
