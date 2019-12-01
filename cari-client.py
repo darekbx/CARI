@@ -116,20 +116,25 @@ class ArgumentsHandler:
             device = args.device
             return port, device
         else:
-            print("No connected devices")
+            raise Exception("No connected devices")
  
-class CmdPrompt(Cmd):
+class CARIPrompt(Cmd):
+
+    prompt = "CARI$ "
 
     preferences_resource = PreferencesResource()
     sqlite_resource = SqliteResource()
 
+    request_callback = None
 
     def do_exit(self, inp):
         return True
 
-    def do_res(self, arg):
-        request = self.handle_resource(arg)
-        # TODO callback to execute?
+    def do_prefs(self, arg):
+        args = arg.split()
+        args.insert(0, PreferencesResource.RESOURCE)
+        request = self.handle_resource(args)
+        self.request_callback(request)
 
     def handle_resource(self, action):
         resource = action[0]
@@ -151,26 +156,33 @@ class CARIClient:
     LINE_ENDING = "\r\n"
 
     arguments_handler = ArgumentsHandler()
+    port = None
+    device = None
 
     def __init__(self):
         print("CARI Console Android Resource Inspector")
 
     def execute(self):
-        port, device = self.arguments_handler.process()
+        try:
+            self.port, self.device = self.arguments_handler.process()
+            # TODO: run cmd prompt for further commands
+            cmd = CARIPrompt()
+            cmd.request_callback = self.handle_request
+            cmd.cmdloop()
+        except Exception as e:
+            print(e)    
 
-        if port is None:
-            port = self.PORT
+    def prefs_callback(self, request):
+        print("A {0}".format(request))
+
+    def handle_request(self, request):
+        if self.port is None:
+            self.port = self.PORT
 
         # TODO adb forward with device?
 
-        # TODO: run cmd prompt for further commands
-        CmdPrompt().cmdloop()
-
-        action = ""
-        request = "" #self.handle_resource(action)
-
         request_json = json.dumps(request)
-        output_json = self.write_and_receive(request_json, port)
+        output_json = self.write_and_receive(request_json, self.port)
         if output_json:
             formatted = self.pretty_json(output_json)
             print(formatted)
