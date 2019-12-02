@@ -22,12 +22,13 @@ Instruction:
 Run: python3 cari-client.py
 
 Options:
--d provide device for use
+-d provide a device
 -p provide custom port for forward, default is 38300
--a provide action 
-Dump preferences: python3 cari-client.py -a prefs dump
-                  python3 cari-client.py -d device -a prefs dump
-                  python3 cari-client.py -d device -p 4000 -a prefs dump
+
+Shell commands:
+use prefs   - Use preferences resource for further actions
+usescope {} - Use scope name in further actions
+clear       - Clear used resource and scopes 
 
 
 TODO:
@@ -54,12 +55,13 @@ class PreferencesResource:
         args_count = len(args)
         command = args[1]
         request = None
+
         if args_count == 2 and command == "dump":
             request = self.create_command_prefs(command)
 
         if args_count == 2 and command == "scopes":
             request = self.create_command_prefs(command)
-
+            
         if args_count == 3 and (command == "list" or command == "ls"):
             scope = args[2]
             arguments = [{"option":scope}]
@@ -121,6 +123,8 @@ class ArgumentsHandler:
 class CARIPrompt(Cmd):
 
     prompt = "CARI$ "
+    use = None
+    prefs_scope = None
 
     preferences_resource = PreferencesResource()
     sqlite_resource = SqliteResource()
@@ -130,11 +134,55 @@ class CARIPrompt(Cmd):
     def do_exit(self, inp):
         return True
 
-    def do_prefs(self, arg):
-        args = arg.split()
-        args.insert(0, PreferencesResource.RESOURCE)
-        request = self.handle_resource(args)
-        self.request_callback(request)
+    #
+    # PREFS
+    # can be used with only "use"
+    def do_dump(self, arg):
+        if self.use == PreferencesResource.RESOURCE:
+            args = self.create_prefs_args()
+            args.append("dump")
+            request = self.handle_resource(args)
+            self.request_callback(request)
+
+    # can be used with only "use"
+    def do_scopes(self, arg):
+        if self.use == PreferencesResource.RESOURCE:
+            args = self.create_prefs_args()
+            args.append("scopes")
+            request = self.handle_resource(args)
+            self.request_callback(request)
+
+    # can be used with "use" and "scope"
+    def do_list(self, arg):
+        if self.use == PreferencesResource.RESOURCE:
+            args = self.create_prefs_args()
+            args.insert(1, "list")
+            request = self.handle_resource(args)
+            self.request_callback(request)
+
+    def do_usescope(self, arg):
+        self.prefs_scope = arg
+        self.prompt = "CARI ({0}\{1})$ ".format(self.use, arg)
+
+    def create_prefs_args(self):
+        args = []
+        if self.use is not None:
+            args.append(self.use)
+        if self.prefs_scope is not None:
+            args.append(self.prefs_scope)
+        return args
+    # /PREFS
+    #
+
+
+    def do_use(self, arg):
+        self.use = arg
+        self.prompt = "CARI ({0})$ ".format(arg)
+
+    def do_clear(self, arg):
+        self.use = None
+        self.prefs_scope = None
+        self.prompt = "CARI$ "
 
     def handle_resource(self, action):
         resource = action[0]
