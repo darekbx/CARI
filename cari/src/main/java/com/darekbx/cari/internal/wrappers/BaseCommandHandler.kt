@@ -8,7 +8,7 @@ internal abstract class BaseCommandHandler {
 
     protected val EMPTY_RESPONSE = ""
 
-    abstract fun handleCommand(commandString: String): Any
+    abstract fun handleCommand(commandString: String?): Any
 
     protected fun parseCommand(commandString: String): CommandWrapper {
         return gson.fromJson(commandString, CommandWrapper::class.java)
