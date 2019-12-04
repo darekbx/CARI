@@ -13,6 +13,8 @@ import com.google.gson.Gson
 
 object CARI {
 
+    private val VERSION_COMMAND = "version"
+
     /**
      * Initializes CARI server for the application.
      *
@@ -42,6 +44,9 @@ object CARI {
     }
 
     private fun handleCommand(command: String, handlers: List<BaseCommandHandler>): String {
+        if (command.replace("\"", "").toLowerCase() == VERSION_COMMAND) {
+            return notifyVersion()
+        }
         handlers.forEach {  commandHandler ->
             val result = commandHandler.handleCommand(command)
             if (result is String) {
@@ -49,6 +54,11 @@ object CARI {
             }
         }
         return notifyError()
+    }
+
+    private fun notifyVersion(): String {
+        val result = gson.toJson(arrayOf("SDK-Version", BuildConfig.VERSION_NAME))
+        return CompressionUtil.encodeData(result)
     }
 
     private fun notifyError(): String {

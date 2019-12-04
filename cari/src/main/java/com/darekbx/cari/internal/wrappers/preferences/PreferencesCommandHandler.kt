@@ -18,7 +18,6 @@ internal class PreferencesCommandHandler(val context: Context) : BaseCommandHand
                 if (command.resource == RESOURCE_NAME) {
                     val argsCount = command.arguments.size
                     return when (command.command) {
-                        "version" -> handleVersion()
                         "scopes" -> handleScopes()
                         "dump" -> handleDump(argsCount, command)
                         "ls", "list" -> handleList(argsCount, command)
@@ -31,10 +30,6 @@ internal class PreferencesCommandHandler(val context: Context) : BaseCommandHand
             }
         }
         return false
-    }
-
-    private fun handleVersion(): String {
-        return createResponse(arrayOf("SDK-Version", BuildConfig.VERSION_NAME))
     }
 
     private fun handleScopes(): String {

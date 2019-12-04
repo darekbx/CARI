@@ -91,8 +91,7 @@ class CmdPrompt(Cmd):
         self.prompt = "CARI$ "
 
     def do_version(self, arg):
-        request = self.preferences_resource.handle_resource(["prefs", "version"])
-        self.request_callback(request)
+        self.request_callback("version")
         
     def handle_resource(self, action):
         resource = action[0]

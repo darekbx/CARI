@@ -10,6 +10,7 @@ import subprocess
 from argumentshandler import ArgumentsHandler
 from preferencesresource import PreferencesResource
 from cmdprompt import CmdPrompt
+from consolecolors import ConsoleColors
 
 '''
 CARI (Console Android Resources Inspector)
@@ -50,6 +51,15 @@ How to list keys from preferences scope:
 5. Type in shell to list all keys: list
 
 
+Add to android:
+
+Add to project gradle file: 
+repositories {
+    maven {
+        url  "https://dl.bintray.com/darekbx/CARI-sdk" 
+    }
+}
+
 '''
 
 class CARIClient:
@@ -68,23 +78,31 @@ class CARIClient:
     arguments_handler = ArgumentsHandler()
     port = None
     device = None
+    initialized = False
 
     def __init__(self):
         print("CARI Console Android Resource Inspector, v{0}".format(self.VERSION))
-        request = PreferencesResource().handle_resource([PreferencesResource.RESOURCE, "version"])
-        request_json = json.dumps(request)
-        result = self.write_and_receive(request_json, self.port)
+        try:
+            self.check_status()
+            self.initialized = True
+        except:
+            self.print_colored("Device with SDK is unavailable", ConsoleColors.FAIL)
+
+    def check_status(self):
+        version_request = "version"
+        result = self.write_and_receive(version_request, self.port)
         result_array = json.loads(result)
-        print(" ".join(result_array))
+        self.print_colored(" ".join(result_array), ConsoleColors.ENDC)
 
     def execute(self):
-        try:
-            self.port, self.device = self.arguments_handler.process()
-            cmd = CmdPrompt()
-            cmd.request_callback = self.handle_request
-            cmd.cmdloop()
-        except Exception as e:
-            print(e)
+        if self.initialized:
+            try:
+                self.port, self.device = self.arguments_handler.process()
+                cmd = CmdPrompt()
+                cmd.request_callback = self.handle_request
+                cmd.cmdloop()
+            except Exception as e:
+                self.print_colored(e)
 
     def handle_request(self, request):
 
@@ -97,9 +115,9 @@ class CARIClient:
                 formatted = self.pretty_json(output_json)
                 print(formatted)
             else:
-                print("Response is malformed: '{0}'".format(output_json))
+                self.print_colored("Response is malformed: '{0}'".format(output_json), ConsoleColors.FAIL)
         else:
-            print("Command is invalid")
+            self.print_colored("Command is invalid", ConsoleColors.FAIL)
 
     def pretty_json(self, output_json):
         parsed = json.loads(output_json)
@@ -139,7 +157,9 @@ class CARIClient:
         data_bytes = base64.b64decode(data.decode(self.ENCODING))
         decompressed = gzip.decompress(data_bytes)
         return decompressed
-
+    
+    def print_colored(self, message, color):
+        print("{1}{0}{2}\n".format(message, color, ConsoleColors.ENDC))
 
 client = CARIClient()
 client.execute()
