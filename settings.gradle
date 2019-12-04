@@ -1,2 +1,2 @@
-include ':app', ':cari'
-rootProject.name='SocketServer'
+include ':app', ':cari-sdk'
+rootProject.name='CARI-sdk'
