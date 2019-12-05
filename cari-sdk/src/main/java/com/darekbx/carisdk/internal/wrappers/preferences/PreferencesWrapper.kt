@@ -13,11 +13,15 @@ internal class PreferencesWrapper(val context: Context) {
 
     fun listScopes(): List<String> {
         val rootPath = context.getApplicationInfo().dataDir + PREFERENCES_DIR
-        val filesList = File(rootPath).list()
-        return filesList
-            .filter { it.endsWith(RESOURCE_SUFIX, true) }
-            .map { it.removeSuffix(RESOURCE_SUFIX) }
-            .toList()
+        return File(rootPath)
+            .takeIf { it.exists() }
+            ?.list()
+            ?.let { filesList ->
+                return filesList
+                    .filter { it.endsWith(RESOURCE_SUFIX, true) }
+                    .map { it.removeSuffix(RESOURCE_SUFIX) }
+                    .toList()
+            } ?: emptyList()
     }
 
     fun listKeys(scope: String): List<String> {

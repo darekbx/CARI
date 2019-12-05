@@ -92,7 +92,7 @@ class CARIClient:
         version_request = "version"
         result = self.write_and_receive(version_request, self.port)
         result_array = json.loads(result)
-        self.print_colored(" ".join(result_array), ConsoleColors.ENDC)
+        self.print_colored(" ".join(result_array), ConsoleColors.OKGREEN)
 
     def execute(self):
         if self.initialized:

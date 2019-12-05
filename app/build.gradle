@@ -38,6 +38,4 @@ dependencies {
 
 
     implementation project(path: ':cari-sdk')
-    //implementation 'com.darekbx.carisdk:cari-sdk:0.1.0'
-
 }

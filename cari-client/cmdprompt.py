@@ -24,7 +24,6 @@ class CmdPrompt(Cmd):
             args = self.create_prefs_args()
             args.insert(1, "dump")
             request = self.handle_resource(args)
-            print(request)
             self.request_callback(request)
 
     # can be used with only "use"
