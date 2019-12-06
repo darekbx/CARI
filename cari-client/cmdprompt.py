@@ -1,6 +1,7 @@
 from cmd import Cmd
 from preferencesresource import PreferencesResource
 from sqliteresource import SqliteResource
+from consolecolors import ConsoleColors
 
 class CmdPrompt(Cmd):
 
@@ -10,6 +11,7 @@ class CmdPrompt(Cmd):
 
     preferences_resource = PreferencesResource()
     sqlite_resource = SqliteResource()
+    resources = [preferences_resource, sqlite_resource]
 
     request_callback = None
 
@@ -81,8 +83,12 @@ class CmdPrompt(Cmd):
             self.prefs_scope = arg
             self.prompt = "CARI ({0}\{1})$ ".format(self.use, arg)
         else:
-            self.use = arg
-            self.prompt = "CARI ({0})$ ".format(arg)
+            resources_names = [resource.RESOURCE for resource in self.resources]
+            if arg in resources_names:
+                self.use = arg
+                self.prompt = "CARI ({0})$ ".format(arg)
+            else:
+                self.print_colored("Unknown resource", ConsoleColors.WARNING)
 
     def do_clear(self, arg):
         self.use = None
@@ -98,3 +104,6 @@ class CmdPrompt(Cmd):
             return self.preferences_resource.handle_resource(action)
         elif resource == SqliteResource.RESOURCE:
             return self.sqlite_resource.handle_resource(action)
+
+    def print_colored(self, message, color):
+        print("{1}{0}{2}\n".format(message, color, ConsoleColors.ENDC))

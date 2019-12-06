@@ -1,7 +1,8 @@
-package com.darekbx.carisdk.internal.wrappers.sqlite
+package com.darekbx.cari.sdk.internal.wrappers.sqlite
 
 import android.content.Context
-import com.darekbx.carisdk.internal.wrappers.BaseCommandHandler
+import com.darekbx.cari.sdk.internal.model.CommandWrapper
+import com.darekbx.cari.sdk.internal.wrappers.BaseCommandHandler
 
 internal class SqliteCommandHandler(val context: Context) : BaseCommandHandler() {
 
@@ -11,10 +12,11 @@ internal class SqliteCommandHandler(val context: Context) : BaseCommandHandler()
         when (commandString) {
             null -> return createErrorResponse("Command is empty!")
             else -> {
-                val command = parseCommand(commandString)
-                if (command.resource == RESOURCE_NAME) {
-                    //val argsCount = command.arguments.size
+                parseCommand<CommandWrapper>(commandString)?.let { command ->
+                    if (command.resource == RESOURCE_NAME) {
+                        //val argsCount = command.arguments.size
 
+                    }
                 }
             }
         }

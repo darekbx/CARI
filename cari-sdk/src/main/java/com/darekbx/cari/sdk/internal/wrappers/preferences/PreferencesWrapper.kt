@@ -1,4 +1,4 @@
-package com.darekbx.carisdk.internal.wrappers.preferences
+package com.darekbx.cari.sdk.internal.wrappers.preferences
 
 import android.content.Context
 import android.content.SharedPreferences

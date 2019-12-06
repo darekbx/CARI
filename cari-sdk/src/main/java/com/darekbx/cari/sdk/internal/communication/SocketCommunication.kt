@@ -1,4 +1,4 @@
-package com.darekbx.carisdk.internal.communication
+package com.darekbx.cari.sdk.internal.communication
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -1,7 +1,7 @@
-package com.darekbx.carisdk.testapplication
+package com.darekbx.cari.testapplication
 
 import android.app.Application
-import com.darekbx.carisdk.CARI
+import com.darekbx.cari.sdk.CARI
 
 class TestApplication : Application() {
 

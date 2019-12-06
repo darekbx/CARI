@@ -1,4 +1,4 @@
-package com.darekbx.carisdk.testapplication
+package com.darekbx.cari.testapplication
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity

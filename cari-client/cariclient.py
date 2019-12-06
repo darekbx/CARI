@@ -17,9 +17,9 @@ CARI (Console Android Resources Inspector)
 Client used to communicate with Android device
 
 
-Instruction:
-
 # TODO: add to android sdk
+
+Instruction:
 
 Connect Android device to the computer and run: python3 cariclient.py
 
@@ -51,14 +51,6 @@ How to list keys from preferences scope:
 5. Type in shell to list all keys: list
 
 
-Add to android:
-
-Add to project gradle file: 
-repositories {
-    maven {
-        url  "https://dl.bintray.com/darekbx/CARI-sdk" 
-    }
-}
 
 '''
 
@@ -125,7 +117,7 @@ class CARIClient:
 
     def forward_port(self, port):
         portForward = "tcp:{0}".format(port)
-        subprocess.run(["adb", "forward", portForward, portForward])
+        subprocess.run(["adb", "forward", portForward, portForward], stdout=subprocess.DEVNULL)
 
     def write_and_receive(self, data, port):
         port = self.obtain_port()

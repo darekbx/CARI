@@ -1,5 +1,6 @@
-package com.darekbx.carisdk.internal.communication
+package com.darekbx.cari.sdk.internal.communication
 
+import android.os.Build
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -7,7 +8,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-@Config(sdk = [21])
+@Config(sdk = [Build.VERSION_CODES.O])
 @RunWith(RobolectricTestRunner::class)
 class CompressionUtilTest {
 

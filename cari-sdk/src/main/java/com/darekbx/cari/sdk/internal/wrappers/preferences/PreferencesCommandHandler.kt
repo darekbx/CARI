@@ -1,8 +1,8 @@
-package com.darekbx.carisdk.internal.wrappers.preferences
+package com.darekbx.cari.sdk.internal.wrappers.preferences
 
 import android.content.Context
-import com.darekbx.carisdk.internal.model.CommandWrapper
-import com.darekbx.carisdk.internal.wrappers.BaseCommandHandler
+import com.darekbx.cari.sdk.internal.model.CommandWrapper
+import com.darekbx.cari.sdk.internal.wrappers.BaseCommandHandler
 
 internal class PreferencesCommandHandler(val context: Context) : BaseCommandHandler() {
 
@@ -13,17 +13,18 @@ internal class PreferencesCommandHandler(val context: Context) : BaseCommandHand
         when (commandString) {
             null -> return createErrorResponse("Command is empty!")
             else -> {
-                val command = parseCommand(commandString)
-                if (command.resource == RESOURCE_NAME) {
-                    val argsCount = command.arguments.size
-                    return when (command.command) {
-                        "scopes" -> handleScopes()
-                        "dump" -> handleDump(argsCount, command)
-                        "ls", "list" -> handleList(argsCount, command)
-                        "get" -> handleGet(argsCount, command)
-                        "set" -> handleSet(argsCount, command)
-                        "rm", "remove" -> handleRemove(argsCount, command)
-                        else -> false
+                parseCommand<CommandWrapper>(commandString)?.let { command ->
+                    if (command.resource == RESOURCE_NAME) {
+                        val argsCount = command.arguments.size
+                        return when (command.command) {
+                            "scopes" -> handleScopes()
+                            "dump" -> handleDump(argsCount, command)
+                            "ls", "list" -> handleList(argsCount, command)
+                            "get" -> handleGet(argsCount, command)
+                            "set" -> handleSet(argsCount, command)
+                            "rm", "remove" -> handleRemove(argsCount, command)
+                            else -> false
+                        }
                     }
                 }
             }
@@ -117,5 +118,9 @@ internal class PreferencesCommandHandler(val context: Context) : BaseCommandHand
 
     private fun createInvalidParametersError() = createErrorResponse("Invalid parameters count")
 
-    private val preferencesWrapper by lazy { PreferencesWrapper(context) }
+    private val preferencesWrapper by lazy {
+        PreferencesWrapper(
+            context
+        )
+    }
 }

@@ -1,4 +1,4 @@
-package com.darekbx.carisdk.internal.communication
+package com.darekbx.cari.sdk.internal.communication
 
 import android.util.Base64
 import java.io.ByteArrayInputStream

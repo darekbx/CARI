@@ -1,19 +1,19 @@
-package com.darekbx.carisdk
+package com.darekbx.cari.sdk
 
 import android.content.Context
-import com.darekbx.carisdk.internal.communication.CompressionUtil
+import com.darekbx.cari.sdk.internal.communication.CompressionUtil
 import kotlinx.coroutines.Job
 
-import com.darekbx.carisdk.internal.communication.SocketCommunication
-import com.darekbx.carisdk.internal.model.ErrorWrapper
-import com.darekbx.carisdk.internal.wrappers.BaseCommandHandler
-import com.darekbx.carisdk.internal.wrappers.preferences.PreferencesCommandHandler
-import com.darekbx.carisdk.internal.wrappers.sqlite.SqliteCommandHandler
+import com.darekbx.cari.sdk.internal.communication.SocketCommunication
+import com.darekbx.cari.sdk.internal.model.ErrorWrapper
+import com.darekbx.cari.sdk.internal.wrappers.BaseCommandHandler
+import com.darekbx.cari.sdk.internal.wrappers.common.CommonCommandHandler
+import com.darekbx.cari.sdk.internal.wrappers.preferences.PreferencesCommandHandler
+import com.darekbx.cari.sdk.internal.wrappers.sqlite.SqliteCommandHandler
 import com.google.gson.Gson
 
 object CARI {
 
-    private val VERSION_COMMAND = "version"
 
     /**
      * Initializes CARI server for the application.
@@ -28,7 +28,8 @@ object CARI {
 
         val commandHandlers = listOf(
             PreferencesCommandHandler(context),
-            SqliteCommandHandler(context)
+            SqliteCommandHandler(context),
+            CommonCommandHandler(context)
         )
 
         val port = options.port
@@ -44,21 +45,13 @@ object CARI {
     }
 
     private fun handleCommand(command: String, handlers: List<BaseCommandHandler>): String {
-        if (command.replace("\"", "").toLowerCase() == VERSION_COMMAND) {
-            return notifyVersion()
-        }
-        handlers.forEach {  commandHandler ->
+        handlers.forEach { commandHandler ->
             val result = commandHandler.handleCommand(command)
             if (result is String) {
                 return CompressionUtil.encodeData(result)
             }
         }
         return notifyError()
-    }
-
-    private fun notifyVersion(): String {
-        val result = gson.toJson(arrayOf("SDK-Version", BuildConfig.VERSION_NAME))
-        return CompressionUtil.encodeData(result)
     }
 
     private fun notifyError(): String {

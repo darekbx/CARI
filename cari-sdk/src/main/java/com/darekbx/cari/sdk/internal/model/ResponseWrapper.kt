@@ -1,3 +1,3 @@
-package com.darekbx.carisdk.internal.model
+package com.darekbx.cari.sdk.internal.model
 
 internal class ResponseWrapper(val response: Any)
