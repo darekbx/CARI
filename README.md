@@ -23,16 +23,21 @@ Connect Android device to the computer, and wait till device is ready, then run:
     
     Commands:
     - **dump** - print all preferences data (can be used with scope)
-    - **list** - list all keys
-    - **remove** - remove key with value
-    - **set** - set value to key
-    - **get** - get key value
+    - **list** - list all keys  (e.g. command: list)
+    - **remove** - remove key with value  (e.g. command: remove KeyToDelete)
+    - **set** - set value to key (e.g. command: set new_key KeyValue)
+    - **get** - get key value (e.g. command: get my_key)
   - **sqlite**, *TODO*
 
 
 #### How to list keys from preferences scope:
-  1. Run CARI: python3 cariclient.py
-  2. In CARI Shell type: use prefs
-  3. Dump all scopes, by typing in shell: dump
-  4. Use preferences scope (eg app_preferences), by typing in shell: use app_preferences   
-  5. Type in shell to list all keys: list
+  1. Run CARI: 
+  > python3 cariclient.py
+  2. In CARI Shell type: 
+  > use prefs
+  3. Dump all scopes, by typing in shell: 
+  > dump
+  4. Use preferences scope (eg app_preferences), by typing in shell: 
+  > use app_preferences   
+  5. Type in shell to list all keys: 
+  > list
