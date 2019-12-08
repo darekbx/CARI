@@ -7,7 +7,7 @@ import com.darekbx.cari.sdk.internal.wrappers.BaseCommandHandler
 internal class PreferencesCommandHandler(val context: Context) : BaseCommandHandler() {
 
     private val RESOURCE_NAME = "prefs"
-    private val NULL_VALUE = "{NULL}"
+    private val NULL_VALUE = "null"
 
     override fun handleCommand(commandString: String?): Any {
         when (commandString) {

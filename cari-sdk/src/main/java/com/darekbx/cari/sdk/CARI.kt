@@ -14,7 +14,6 @@ import com.google.gson.Gson
 
 object CARI {
 
-
     /**
      * Initializes CARI server for the application.
      *

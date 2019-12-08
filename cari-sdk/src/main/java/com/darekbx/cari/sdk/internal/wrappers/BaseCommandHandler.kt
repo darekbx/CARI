@@ -1,6 +1,7 @@
 package com.darekbx.cari.sdk.internal.wrappers
 
 import com.darekbx.cari.sdk.internal.model.ErrorWrapper
+import com.darekbx.cari.sdk.internal.model.ResponseWrapper
 import com.google.gson.Gson
 import java.lang.Exception
 
@@ -20,7 +21,8 @@ internal abstract class BaseCommandHandler {
 
     protected fun createResponse(response: Any): String {
         try {
-            return gson.toJson(response)
+            val wrapper = ResponseWrapper(response)
+            return gson.toJson(wrapper)
         } catch (e: Exception) {
             return ""
         }

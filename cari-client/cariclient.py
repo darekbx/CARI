@@ -15,45 +15,7 @@ from consolecolors import ConsoleColors
 '''
 CARI (Console Android Resources Inspector)
 Client used to communicate with Android device
-
-
-# TODO: add to android sdk
-
-Instruction:
-
-Connect Android device to the computer and run: python3 cariclient.py
-
-Options:
--d provide a device
--p provide custom port for forward, default is 38300
-
-Shell commands:
-use {resource/prefs_scope}  - Use resource, scope for further actions
-clear                       - Clear used resource and scopes 
-version                     - Print CARI Android SDK version
-
-Resources:
-    - prefs
-        Android shared preferences wrapper, commands:
-            - dump - print all preferences data (can be used with scope)
-            - list - list all key
-            - remove - remove key with value
-            - set - set value to key
-            - get - get key value
-    - sqlite
-
-
-How to list keys from preferences scope:
-1. Run CARI: python3 cariclient.py
-2. In CARI Shell type: use prefs
-3. Dump all scopes, by typing in shell: dump
-4. Use preferences scope (eg app_preferences), by typing in shell: use app_preferences   
-5. Type in shell to list all keys: list
-
-
-
 '''
-
 class CARIClient:
 
     # adb forward tcp:38300 tcp:38300

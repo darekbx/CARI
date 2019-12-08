@@ -3,6 +3,7 @@ package com.darekbx.cari.sdk.internal.wrappers.common
 import android.content.Context
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
+import com.darekbx.cari.sdk.internal.model.ResponseWrapper
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.junit.Test
@@ -22,10 +23,10 @@ class CommonCommandHandlerTest {
     fun handleCommand_version() {
         val handler = CommonCommandHandler(context)
         val resultJson = handler.handleCommand("\"version\"") as String?
-        val type = object : TypeToken<List<String>>() { }.type
-        val result = gson.fromJson<List<String>>(resultJson, type)
+        val type = object : TypeToken<ResponseWrapper>() { }.type
+        val result = gson.fromJson<ResponseWrapper>(resultJson, type)
 
-        assertEquals(2, result.size)
+        assertEquals(2, (result.response as List<String>).size)
     }
 
     @Test
