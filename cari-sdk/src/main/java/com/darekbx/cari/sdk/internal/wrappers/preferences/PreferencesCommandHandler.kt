@@ -32,6 +32,8 @@ internal class PreferencesCommandHandler(val context: Context) : BaseCommandHand
         return false
     }
 
+    override fun obtainType() = RESOURCE_NAME
+
     private fun handleScopes(): String {
         val scopes = preferencesWrapper.listScopes()
         return createResponse(scopes)
@@ -100,7 +102,7 @@ internal class PreferencesCommandHandler(val context: Context) : BaseCommandHand
                 val key = command.arguments.get(1)
                 val value = command.arguments.get(2)
                 preferencesWrapper.save(scope.option, key.option, value.option)
-                createResponse(EMPTY_RESPONSE)
+                createResponse("Added \"${key.option}\"")
             }
             else -> createInvalidParametersError()
         }
@@ -111,7 +113,7 @@ internal class PreferencesCommandHandler(val context: Context) : BaseCommandHand
                 val scope = command.arguments.get(0)
                 val key = command.arguments.get(1)
                 preferencesWrapper.remove(scope.option, key.option)
-                createResponse(EMPTY_RESPONSE)
+                createResponse("Removed \"${key.option}\"")
             }
             else -> createInvalidParametersError()
         }

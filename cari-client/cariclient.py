@@ -30,6 +30,7 @@ class CARIClient:
     LINE_ENDING = "\r\n"
 
     arguments_handler = ArgumentsHandler()
+    preferences_resource = PreferencesResource()
     port = None
     device = None
     initialized = False
@@ -37,6 +38,7 @@ class CARIClient:
     def __init__(self):
         print("CARI Console Android Resource Inspector, v{0}".format(self.VERSION))
         try:
+            self.port, self.device = self.arguments_handler.process()
             self.check_status()
             self.initialized = True
         except:
@@ -44,30 +46,28 @@ class CARIClient:
 
     def check_status(self):
         version_request = "version"
-        result = self.write_and_receive(version_request, self.port)
+        result = self.write_and_receive(version_request)
         result_array = json.loads(result)
-        self.print_colored(" ".join(result_array), ConsoleColors.OKGREEN)
+        self.print_colored(" ".join(result_array["response"]), ConsoleColors.OKGREEN)
 
     def execute(self):
         if self.initialized:
             try:
-                self.port, self.device = self.arguments_handler.process()
                 cmd = CmdPrompt()
                 cmd.request_callback = self.handle_request
                 cmd.cmdloop()
             except Exception as e:
-                self.print_colored(e)
+                #raise e
+                self.print_colored(str(e), ConsoleColors.FAIL)
 
     def handle_request(self, request):
-
-        # TODO adb forward with device?
-
         if request is not None:
             request_json = json.dumps(request)
-            output_json = self.write_and_receive(request_json, self.port)
+            output_json = self.write_and_receive(request_json)
             if output_json:
                 formatted = self.pretty_json(output_json)
-                print(formatted)
+                if formatted is not None:
+                    print(formatted)
             else:
                 self.print_colored("Response is malformed: '{0}'".format(output_json), ConsoleColors.FAIL)
         else:
@@ -75,15 +75,24 @@ class CARIClient:
 
     def pretty_json(self, output_json):
         parsed = json.loads(output_json)
-        return json.dumps(parsed, indent=4, sort_keys=True)
+        if parsed["response"]:
+            if parsed["type"] == PreferencesResource.RESOURCE:
+                return self.preferences_resource.print_pretty(parsed["response"])
+            else:
+                return json.dumps(parsed["response"], indent=4, sort_keys=True)
 
-    def forward_port(self, port):
+    def forward_port(self, port, device):
         portForward = "tcp:{0}".format(port)
-        subprocess.run(["adb", "forward", portForward, portForward], stdout=subprocess.DEVNULL)
+        args = None
+        if device is None:
+            args = ["adb", "forward", portForward, portForward]
+        else:
+            args = ["adb", "-s", device, "forward", portForward, portForward]
+        subprocess.run(args, stdout=subprocess.DEVNULL)
 
-    def write_and_receive(self, data, port):
+    def write_and_receive(self, data):
         port = self.obtain_port()
-        self.forward_port(port)
+        self.forward_port(port, self.device)
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((self.HOST, port))
 

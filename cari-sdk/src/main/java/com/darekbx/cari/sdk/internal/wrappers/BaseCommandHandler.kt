@@ -7,9 +7,9 @@ import java.lang.Exception
 
 internal abstract class BaseCommandHandler {
 
-    protected val EMPTY_RESPONSE = ""
-
     abstract fun handleCommand(commandString: String?): Any
+
+    abstract fun obtainType(): String
 
     protected inline fun <reified T: Any> parseCommand(commandString: String): T? {
         try {
@@ -21,7 +21,8 @@ internal abstract class BaseCommandHandler {
 
     protected fun createResponse(response: Any): String {
         try {
-            val wrapper = ResponseWrapper(response)
+            val type = obtainType()
+            val wrapper = ResponseWrapper(type, response)
             return gson.toJson(wrapper)
         } catch (e: Exception) {
             return ""

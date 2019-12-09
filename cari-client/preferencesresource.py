@@ -53,3 +53,6 @@ class PreferencesResource:
             "arguments": arguments
         }
         return data
+    
+    def print_pretty(self, response):
+        print(response)

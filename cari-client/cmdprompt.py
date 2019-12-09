@@ -37,6 +37,8 @@ class CmdPrompt(Cmd):
             self.request_callback(request)
 
     # can be used with "use" and "scope"
+    def do_ls(self, arg):
+        self.do_list(arg)
     def do_list(self, arg):
         if self.use == PreferencesResource.RESOURCE:
             args = self.create_prefs_args()
@@ -52,6 +54,8 @@ class CmdPrompt(Cmd):
             request = self.handle_resource(args)
             self.request_callback(request)
 
+    def do_rm(self, arg):
+        self.do_remove(arg)
     def do_remove(self, arg):
         if self.use == PreferencesResource.RESOURCE:
             args = self.create_prefs_args()

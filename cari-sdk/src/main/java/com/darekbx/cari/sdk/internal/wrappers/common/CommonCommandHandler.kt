@@ -6,6 +6,7 @@ import com.darekbx.cari.sdk.internal.wrappers.BaseCommandHandler
 
 internal class CommonCommandHandler (val context: Context) : BaseCommandHandler() {
 
+    private val RESOURCE_NAME = "common"
     private val VERSION_COMMAND = "version"
 
     override fun handleCommand(commandString: String?): Any {
@@ -22,6 +23,8 @@ internal class CommonCommandHandler (val context: Context) : BaseCommandHandler(
         }
         return false
     }
+
+    override fun obtainType() = RESOURCE_NAME
 
     private fun handleVersion(): String {
         val result = arrayOf("SDK-Version", BuildConfig.VERSION_NAME)

@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.darekbx.cari.sdk.internal.model.Argument
 import com.darekbx.cari.sdk.internal.model.CommandWrapper
+import com.darekbx.cari.sdk.internal.model.ResponseWrapper
 import com.google.gson.Gson
 import org.junit.Test
 
@@ -35,9 +36,9 @@ class PreferencesCommandHandlerTest {
     fun handleCommand_dump() {
         val handler = PreferencesCommandHandler(context)
         val command = CommandWrapper("prefs", "dump", mutableListOf())
-        val result = handler.handleCommand(gson.toJson(command)) as String
+        val result = processCommand(handler, command)
 
-        assertEquals("{\"response\":{\"app_preferences\":{\"test_key_1_1\":\"test_value_1_1\"}}}", result)
+        assertEquals("{app_preferences={test_key_1_1=test_value_1_1}}", result.response.toString())
     }
 
     @Test
@@ -48,18 +49,18 @@ class PreferencesCommandHandlerTest {
                 Argument(scope, "")
             )
         )
-        val result = handler.handleCommand(gson.toJson(command)) as String
+        val result = processCommand(handler, command)
 
-        assertEquals("{\"response\":{\"test_key_1_1\":\"test_value_1_1\"}}", result)
+        assertEquals("{test_key_1_1=test_value_1_1}", result.response.toString())
     }
 
     @Test
     fun handleCommand_scopes() {
         val handler = PreferencesCommandHandler(context)
         val command = CommandWrapper("prefs", "scopes", mutableListOf())
-        val result = handler.handleCommand(gson.toJson(command)) as String
+        val result = processCommand(handler, command)
 
-        assertEquals("{\"response\":[\"app_preferences\"]}", result)
+        assertEquals("[app_preferences]", result.response.toString())
     }
 
     @Test
@@ -70,9 +71,9 @@ class PreferencesCommandHandlerTest {
                 Argument(scope, "")
             )
         )
-        val result = handler.handleCommand(gson.toJson(command)) as String
+        val result = processCommand(handler, command)
 
-        assertEquals("{\"response\":[\"test_key_1_1\"]}", result)
+        assertEquals("[test_key_1_1]", result.response.toString())
         assertError(handler, command)
     }
 
@@ -85,9 +86,9 @@ class PreferencesCommandHandlerTest {
                 Argument("test_key_1_1", "")
             )
         )
-        val result = handler.handleCommand(gson.toJson(command)) as String
+        val result = processCommand(handler, command)
 
-        assertEquals("{\"response\":\"test_value_1_1\"}", result)
+        assertEquals("test_value_1_1", result.response.toString())
         assertError(handler, command)
     }
 
@@ -100,8 +101,9 @@ class PreferencesCommandHandlerTest {
                 Argument("unknown", "")
             )
         )
-        val result = handler.handleCommand(gson.toJson(command)) as String
-        assertEquals("{\"response\":\"null\"}", result)
+        val result = processCommand(handler, command)
+
+        assertEquals("null", result.response)
     }
 
     @Test
@@ -113,7 +115,8 @@ class PreferencesCommandHandlerTest {
                 Argument("test_key_1_1", "")
             )
         )
-        handler.handleCommand(gson.toJson(commandRemove)) as String
+        val result = processCommand(handler, commandRemove)
+        assertEquals("Removed \"test_key_1_1\"", result.response.toString())
         assertError(handler, commandRemove)
 
         val commandResult = CommandWrapper(
@@ -121,9 +124,9 @@ class PreferencesCommandHandlerTest {
                 Argument(scope, "")
             )
         )
-        val resultResult = handler.handleCommand(gson.toJson(commandResult)) as String
+        val resultResult = processCommand(handler, commandResult)
 
-        assertEquals("{\"response\":[]}", resultResult)
+        assertEquals("[]", resultResult.response.toString())
     }
 
     @Test
@@ -136,7 +139,8 @@ class PreferencesCommandHandlerTest {
                 Argument("test_value", "")
             )
         )
-        handler.handleCommand(gson.toJson(commandSet)) as String
+        val result = processCommand(handler, commandSet)
+        assertEquals("Added \"test_key\"", result.response.toString())
         assertError(handler, commandSet)
 
         val commandResult = CommandWrapper(
@@ -144,9 +148,14 @@ class PreferencesCommandHandlerTest {
                 Argument(scope, "")
             )
         )
-        val resultResult = handler.handleCommand(gson.toJson(commandResult)) as String
+        val resultResult = processCommand(handler, commandResult)
 
-        assertEquals("{\"response\":[\"test_key_1_1\",\"test_key\"]}", resultResult)
+        assertEquals("[test_key_1_1, test_key]", resultResult.response.toString())
+    }
+
+    private fun processCommand(handler: PreferencesCommandHandler, command: CommandWrapper ): ResponseWrapper {
+        val resultJson = handler.handleCommand(gson.toJson(command)) as String
+        return gson.fromJson<ResponseWrapper>(resultJson, ResponseWrapper::class.java)
     }
 
     private fun assertError(handler: PreferencesCommandHandler, command: CommandWrapper) {

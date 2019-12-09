@@ -18,7 +18,7 @@ class ArgumentsHandler:
         devices_count = self.count_connected_devices()
         if devices_count > 0:
             if devices_count > 1 and args.device is None:
-                print("Please specify device to use")
+                raise Exception("Please specify device to use")
             port = args.port
             device = args.device
             return port, device

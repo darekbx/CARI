@@ -22,4 +22,6 @@ internal class SqliteCommandHandler(val context: Context) : BaseCommandHandler()
         }
         return false
     }
+
+    override fun obtainType() = RESOURCE_NAME
 }
