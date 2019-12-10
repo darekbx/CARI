@@ -1,3 +1,5 @@
+from consolecolors import ConsoleColors
+
 class PreferencesResource:
 
     RESOURCE = "prefs"
@@ -55,4 +57,20 @@ class PreferencesResource:
         return data
     
     def print_pretty(self, response):
-        print(response)
+        if isinstance(response, list):
+            for item in response:
+                print("{1}{0}{2}".format(item, ConsoleColors.BOLD, ConsoleColors.ENDC))
+        elif isinstance(response, dict):
+            for item in response:
+                value = response[item]
+                if isinstance(value, dict):
+                    print("{1}{0}{2}".format(item, ConsoleColors.HEADER, ConsoleColors.ENDC))
+                    for sub_item in value:
+                        sum_value = value[sub_item]
+                        print("\t{2}{0}{3}: {1}".format(sub_item, sum_value, ConsoleColors.BOLD, ConsoleColors.ENDC))
+                    print("\n")
+                else:
+                    print("{2}{0}{3}: {1}".format(item, value, ConsoleColors.BOLD, ConsoleColors.ENDC))
+        else:
+            print("{1}{0}{2}".format(response, ConsoleColors.BOLD, ConsoleColors.ENDC))
+        print("\n")
