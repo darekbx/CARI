@@ -3,6 +3,7 @@ from consolecolors import ConsoleColors
 class PreferencesResource:
 
     RESOURCE = "prefs"
+    TAB_SIZE = 4
 
     def handle_resource(self, args):
         args_count = len(args)
@@ -58,19 +59,25 @@ class PreferencesResource:
     
     def print_pretty(self, response):
         if isinstance(response, list):
-            for item in response:
-                print("{1}{0}{2}".format(item, ConsoleColors.BOLD, ConsoleColors.ENDC))
+            self.print_pretty_list(response)
         elif isinstance(response, dict):
-            for item in response:
-                value = response[item]
-                if isinstance(value, dict):
-                    print("{1}{0}{2}".format(item, ConsoleColors.HEADER, ConsoleColors.ENDC))
-                    for sub_item in value:
-                        sum_value = value[sub_item]
-                        print("\t{2}{0}{3}: {1}".format(sub_item, sum_value, ConsoleColors.BOLD, ConsoleColors.ENDC))
-                    print("\n")
-                else:
-                    print("{2}{0}{3}: {1}".format(item, value, ConsoleColors.BOLD, ConsoleColors.ENDC))
+            self.print_pretty_dict(response)
         else:
-            print("{1}{0}{2}".format(response, ConsoleColors.BOLD, ConsoleColors.ENDC))
+            print("{1}{0}{2}\n".format(response, ConsoleColors.BOLD, ConsoleColors.ENDC))
+
+    def print_pretty_list(self, response):
+        for item in response:
+            print("{1}{0}{2}".format(item, ConsoleColors.BOLD, ConsoleColors.ENDC))
+        print("\n")
+    
+    def print_pretty_dict(self, response):
+        for item in response:
+            value = response[item]
+            if isinstance(value, dict):
+                print("{1}{0}{2}".format(item, ConsoleColors.HEADER, ConsoleColors.ENDC))
+                for sub_item in value:
+                    sum_value = value[sub_item]
+                    print("\t{2}{0}{3}: {1}".format(sub_item, sum_value, ConsoleColors.BOLD, ConsoleColors.ENDC).expandtabs(self.TAB_SIZE))
+            else:
+                print("{2}{0}{3}: {1}".format(item, value, ConsoleColors.BOLD, ConsoleColors.ENDC))
         print("\n")
