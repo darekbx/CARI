@@ -8,6 +8,7 @@ class CmdPrompt(Cmd):
     prompt = "CARI$ "
     use = None
     prefs_scope = None
+    sqlite_active_db = None
 
     preferences_resource = PreferencesResource()
     sqlite_resource = SqliteResource()
@@ -82,9 +83,44 @@ class CmdPrompt(Cmd):
     # /PREFS
     #
 
+
+    #
+    # SQLITE
+    # can be used with only "use"
+    def do_databases(self, arg):
+        if self.use == SqliteResource.RESOURCE:
+            args = self.create_sqlite_args()
+            args.insert(1, "databases")
+            request = self.handle_resource(args)
+            self.request_callback(request)
+
+    def do_q(self, arg):
+        if self.use == SqliteResource.RESOURCE:
+            if self.sqlite_active_db is None:
+                self.print_colored("Please select a database", ConsoleColors.WARNING)
+                return
+            args = self.create_sqlite_args()
+            args.insert(1, "q")
+            args.extend(arg.split())
+            request = self.handle_resource(args)
+            self.request_callback(request)
+
+    def create_sqlite_args(self):
+        args = []
+        if self.use is not None:
+            args.append(self.use)
+        if self.sqlite_active_db is not None:
+            args.append(self.sqlite_active_db)
+        return args
+    # /SQLITE
+    #
+
     def do_use(self, arg):
         if self.use == PreferencesResource.RESOURCE:
             self.prefs_scope = arg
+            self.prompt = "CARI ({0}\{1})$ ".format(self.use, arg)
+        elif self.use == SqliteResource.RESOURCE:
+            self.sqlite_active_db = arg
             self.prompt = "CARI ({0}\{1})$ ".format(self.use, arg)
         else:
             resources_names = [resource.RESOURCE for resource in self.resources]
@@ -93,10 +129,14 @@ class CmdPrompt(Cmd):
                 self.prompt = "CARI ({0})$ ".format(arg)
             else:
                 self.print_colored("Unknown resource", ConsoleColors.WARNING)
+                print("Available resources:")
+                for name in resources_names:
+                    print("{1}\t{0}{2}".format(name, ConsoleColors.HEADER, ConsoleColors.ENDC).expandtabs(4))
 
     def do_clear(self, arg):
         self.use = None
         self.prefs_scope = None
+        self.sqlite_active_db = None
         self.prompt = "CARI$ "
 
     def do_version(self, arg):

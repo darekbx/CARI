@@ -9,6 +9,7 @@ import subprocess
 
 from argumentshandler import ArgumentsHandler
 from preferencesresource import PreferencesResource
+from sqliteresource import SqliteResource
 from cmdprompt import CmdPrompt
 from consolecolors import ConsoleColors
 
@@ -31,6 +32,7 @@ class CARIClient:
 
     arguments_handler = ArgumentsHandler()
     preferences_resource = PreferencesResource()
+    sqlite_resource = SqliteResource()
     port = None
     device = None
     initialized = False
@@ -57,7 +59,7 @@ class CARIClient:
                 cmd.request_callback = self.handle_request
                 cmd.cmdloop()
             except Exception as e:
-                #raise e
+                raise e
                 self.print_colored(str(e), ConsoleColors.FAIL)
 
     def handle_request(self, request):
@@ -75,11 +77,15 @@ class CARIClient:
 
     def pretty_json(self, output_json):
         parsed = json.loads(output_json)
-        if parsed["response"]:
+        if "response" in parsed:
             if parsed["type"] == PreferencesResource.RESOURCE:
                 return self.preferences_resource.print_pretty(parsed["response"])
+            elif parsed["type"] == SqliteResource.RESOURCE:
+                return self.sqlite_resource.print_pretty(parsed["response"])
             else:
                 return json.dumps(parsed["response"], indent=4, sort_keys=True)
+        elif "error" in parsed:
+            return "{1}{0}{2}".format(parsed["error"], ConsoleColors.FAIL, ConsoleColors.ENDC)
 
     def forward_port(self, port, device):
         portForward = "tcp:{0}".format(port)

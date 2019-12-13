@@ -1,5 +1,6 @@
 package com.darekbx.cari.sdk.internal.wrappers
 
+import com.darekbx.cari.BuildConfig
 import com.darekbx.cari.sdk.internal.model.ErrorWrapper
 import com.darekbx.cari.sdk.internal.model.ResponseWrapper
 import com.google.gson.Gson
@@ -15,6 +16,9 @@ internal abstract class BaseCommandHandler {
         try {
             return gson.fromJson(commandString, T::class.java)
         } catch (e: Exception) {
+            if (BuildConfig.DEBUG) {
+                e.printStackTrace()
+            }
             return null
         }
     }
@@ -25,6 +29,9 @@ internal abstract class BaseCommandHandler {
             val wrapper = ResponseWrapper(type, response)
             return gson.toJson(wrapper)
         } catch (e: Exception) {
+            if (BuildConfig.DEBUG) {
+                e.printStackTrace()
+            }
             return ""
         }
     }

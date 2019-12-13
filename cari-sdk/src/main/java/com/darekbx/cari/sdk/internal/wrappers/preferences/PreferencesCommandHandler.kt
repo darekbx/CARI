@@ -13,16 +13,16 @@ internal class PreferencesCommandHandler(val context: Context) : BaseCommandHand
         when (commandString) {
             null -> return createErrorResponse("Command is empty!")
             else -> {
-                parseCommand<CommandWrapper>(commandString)?.let { command ->
-                    if (command.resource == RESOURCE_NAME) {
-                        val argsCount = command.arguments.size
-                        return when (command.command) {
+                parseCommand<CommandWrapper>(commandString)?.let { commandWrapper ->
+                    if (commandWrapper.resource == RESOURCE_NAME) {
+                        val argsCount = commandWrapper.arguments.size
+                        return when (commandWrapper.command) {
                             "scopes" -> handleScopes()
-                            "dump" -> handleDump(argsCount, command)
-                            "ls", "list" -> handleList(argsCount, command)
-                            "get" -> handleGet(argsCount, command)
-                            "set" -> handleSet(argsCount, command)
-                            "rm", "remove" -> handleRemove(argsCount, command)
+                            "dump" -> handleDump(argsCount, commandWrapper)
+                            "ls", "list" -> handleList(argsCount, commandWrapper)
+                            "get" -> handleGet(argsCount, commandWrapper)
+                            "set" -> handleSet(argsCount, commandWrapper)
+                            "rm", "remove" -> handleRemove(argsCount, commandWrapper)
                             else -> false
                         }
                     }
@@ -63,8 +63,8 @@ internal class PreferencesCommandHandler(val context: Context) : BaseCommandHand
         return createResponse(result)
     }
 
-    private fun dumpScope(command: CommandWrapper): String {
-        val scope = command.arguments.get(0).option
+    private fun dumpScope(commandWrapper: CommandWrapper): String {
+        val scope = commandWrapper.arguments.get(0)
         val keys = preferencesWrapper.listKeys(scope)
         val result = mutableMapOf<String, String>()
         keys.forEach { key ->
@@ -74,55 +74,51 @@ internal class PreferencesCommandHandler(val context: Context) : BaseCommandHand
         return createResponse(result)
     }
 
-    private fun handleList(argsCount: Int, command: CommandWrapper) =
+    private fun handleList(argsCount: Int, commandWrapper: CommandWrapper) =
         when (argsCount) {
             1 -> {
-                val scope = command.arguments.get(0)
-                val keys = preferencesWrapper.listKeys(scope.option)
+                val scope = commandWrapper.arguments.get(0)
+                val keys = preferencesWrapper.listKeys(scope)
                 createResponse(keys)
             }
             else -> createInvalidParametersError()
         }
 
-    private fun handleGet(argsCount: Int, command: CommandWrapper) =
+    private fun handleGet(argsCount: Int, commandWrapper: CommandWrapper) =
         when (argsCount) {
             2 -> {
-                val scope = command.arguments.get(0)
-                val key = command.arguments.get(1)
-                val value = preferencesWrapper.getValue(scope.option, key.option) ?: NULL_VALUE
+                val scope = commandWrapper.arguments.get(0)
+                val key = commandWrapper.arguments.get(1)
+                val value = preferencesWrapper.getValue(scope, key) ?: NULL_VALUE
                 createResponse(value)
             }
             else -> createInvalidParametersError()
         }
 
-    private fun handleSet(argsCount: Int, command: CommandWrapper) =
+    private fun handleSet(argsCount: Int, commandWrapper: CommandWrapper) =
         when (argsCount) {
             3 -> {
-                val scope = command.arguments.get(0)
-                val key = command.arguments.get(1)
-                val value = command.arguments.get(2)
-                preferencesWrapper.save(scope.option, key.option, value.option)
-                createResponse("Added \"${key.option}\"")
+                val scope = commandWrapper.arguments.get(0)
+                val key = commandWrapper.arguments.get(1)
+                val value = commandWrapper.arguments.get(2)
+                preferencesWrapper.save(scope, key, value)
+                createResponse("Added \"${key}\"")
             }
             else -> createInvalidParametersError()
         }
 
-    private fun handleRemove(argsCount: Int, command: CommandWrapper) =
+    private fun handleRemove(argsCount: Int, commandWrapper: CommandWrapper) =
         when (argsCount) {
             2 -> {
-                val scope = command.arguments.get(0)
-                val key = command.arguments.get(1)
-                preferencesWrapper.remove(scope.option, key.option)
-                createResponse("Removed \"${key.option}\"")
+                val scope = commandWrapper.arguments.get(0)
+                val key = commandWrapper.arguments.get(1)
+                preferencesWrapper.remove(scope, key)
+                createResponse("Removed \"${key}\"")
             }
             else -> createInvalidParametersError()
         }
 
     private fun createInvalidParametersError() = createErrorResponse("Invalid parameters count")
 
-    private val preferencesWrapper by lazy {
-        PreferencesWrapper(
-            context
-        )
-    }
+    private val preferencesWrapper by lazy { PreferencesWrapper(context) }
 }

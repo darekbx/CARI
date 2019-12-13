@@ -51,20 +51,22 @@ class TestRoomDatabase {
     fun createTestDatabase(context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
             val database = Room.databaseBuilder(context, TestDatabase::class.java, TestDatabase.DB_NAME).build()
-            database.clearAllTables()
+            with (database){
+                clearAllTables()
 
-            val companyDao = database.copanyDao()
-            val companyOneId = companyDao.add(CompanyDto(name = "Company One", address = "Milky Road 1, 02412 NY"))
-            val companyTwoId = companyDao.add(CompanyDto(name = "Company Two", address = "Star Road 42, 46321 LA"))
+                val companyDao = copanyDao()
+                val companyOneId = companyDao.add(CompanyDto(name = "Company One", address = "Milky Road 1, 02412 NY"))
+                val companyTwoId = companyDao.add(CompanyDto(name = "Company Two", address = "Star Road 42, 46321 LA"))
 
-            database.personDao().run {
-                add(PersonDto(name = "John Smith", age = 35, active = true, companyId = companyOneId))
-                add(PersonDto(name = "Daniel Brown", age = 56, active = false, companyId = companyOneId))
-                add(PersonDto(name = "Mike Miller", age = 19, active = true, companyId = companyTwoId))
-                add(PersonDto(name = "Stanley Wilson", age = 43, active = true, companyId = companyTwoId))
+                personDao().run {
+                    add(PersonDto(name = "John Smith", age = 35, active = true, companyId = companyOneId))
+                    add(PersonDto(name = "Daniel Brown", age = 56, active = false, companyId = companyOneId))
+                    add(PersonDto(name = "Mike Miller", age = 19, active = true, companyId = companyTwoId))
+                    add(PersonDto(name = "Stanley Wilson", age = 43, active = true, companyId = companyTwoId))
+                }
+
+                close()
             }
-
-            database.close()
         }
     }
 }

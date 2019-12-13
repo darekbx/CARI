@@ -34,6 +34,7 @@ class TestDefaultDatabase {
     fun createTestDatabase(context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
             val db = TestDbHelper(context).writableDatabase
+            db.delete(TABLE_NAME, null, null)
 
             with(db) {
                 insert(TABLE_NAME, null, ContentValues().apply {

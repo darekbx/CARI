@@ -3,7 +3,6 @@ package com.darekbx.cari.sdk.internal.wrappers.preferences
 import android.content.Context
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
-import com.darekbx.cari.sdk.internal.model.Argument
 import com.darekbx.cari.sdk.internal.model.CommandWrapper
 import com.darekbx.cari.sdk.internal.model.ResponseWrapper
 import com.google.gson.Gson
@@ -45,9 +44,7 @@ class PreferencesCommandHandlerTest {
     fun handleCommand_dump_scope() {
         val handler = PreferencesCommandHandler(context)
         val command = CommandWrapper(
-            "prefs", "dump", mutableListOf(
-                Argument(scope, "")
-            )
+            "prefs", "dump", mutableListOf(scope)
         )
         val result = processCommand(handler, command)
 
@@ -67,9 +64,7 @@ class PreferencesCommandHandlerTest {
     fun handleCommand_list() {
         val handler = PreferencesCommandHandler(context)
         val command = CommandWrapper(
-            "prefs", "list", mutableListOf(
-                Argument(scope, "")
-            )
+            "prefs", "list", mutableListOf(scope)
         )
         val result = processCommand(handler, command)
 
@@ -81,10 +76,7 @@ class PreferencesCommandHandlerTest {
     fun handleCommand_get() {
         val handler = PreferencesCommandHandler(context)
         val command = CommandWrapper(
-            "prefs", "get", mutableListOf(
-                Argument(scope, ""),
-                Argument("test_key_1_1", "")
-            )
+            "prefs", "get", mutableListOf(scope, "test_key_1_1")
         )
         val result = processCommand(handler, command)
 
@@ -96,10 +88,7 @@ class PreferencesCommandHandlerTest {
     fun handleCommand_get_null() {
         val handler = PreferencesCommandHandler(context)
         val command = CommandWrapper(
-            "prefs", "get", mutableListOf(
-                Argument(scope, ""),
-                Argument("unknown", "")
-            )
+            "prefs", "get", mutableListOf(scope, "unknown")
         )
         val result = processCommand(handler, command)
 
@@ -110,19 +99,14 @@ class PreferencesCommandHandlerTest {
     fun handleCommand_remove() {
         val handler = PreferencesCommandHandler(context)
         val commandRemove = CommandWrapper(
-            "prefs", "remove", mutableListOf(
-                Argument(scope, ""),
-                Argument("test_key_1_1", "")
-            )
+            "prefs", "remove", mutableListOf(scope, "test_key_1_1")
         )
         val result = processCommand(handler, commandRemove)
         assertEquals("Removed \"test_key_1_1\"", result.response.toString())
         assertError(handler, commandRemove)
 
         val commandResult = CommandWrapper(
-            "prefs", "list", mutableListOf(
-                Argument(scope, "")
-            )
+            "prefs", "list", mutableListOf(scope)
         )
         val resultResult = processCommand(handler, commandResult)
 
@@ -133,20 +117,14 @@ class PreferencesCommandHandlerTest {
     fun handleCommand_set() {
         val handler = PreferencesCommandHandler(context)
         val commandSet = CommandWrapper(
-            "prefs", "set", mutableListOf(
-                Argument(scope, ""),
-                Argument("test_key", ""),
-                Argument("test_value", "")
-            )
+            "prefs", "set", mutableListOf(scope, "test_key", "test_value")
         )
         val result = processCommand(handler, commandSet)
         assertEquals("Added \"test_key\"", result.response.toString())
         assertError(handler, commandSet)
 
         val commandResult = CommandWrapper(
-            "prefs", "list", mutableListOf(
-                Argument(scope, "")
-            )
+            "prefs", "list", mutableListOf(scope)
         )
         val resultResult = processCommand(handler, commandResult)
 
