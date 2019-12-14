@@ -14,9 +14,9 @@ Connect Android device to the computer, and wait till device is ready, then run:
   - **-p** provide custom port for forward, default is 38300
 
 #### Shell commands
-  - **use** {resource|prefs_scope}  - Use resource or scope for further actions
-  - **clear**                       - Clear used resource and scopes
-  - **version**                     - Print CARI Android SDK version
+  - **use** {resource|prefs_scope|sqlite_database}  - Use resource, scope or sqlite database for further actions
+  - **clear**                                       - Clear used resource and scopes
+  - **version**                                     - Print CARI Android SDK version
 
 #### Resources
   - **prefs**, Android shared preferences wrapper, commands:
