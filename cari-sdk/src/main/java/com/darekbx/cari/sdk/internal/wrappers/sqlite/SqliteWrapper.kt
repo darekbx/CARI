@@ -8,6 +8,10 @@ import android.os.SystemClock
 
 internal class SqliteWrapper(val context: Context) {
 
+    companion object
+
+    val DEFAULT_LIMIT = 50
+
     fun Double.format(digits: Int) = "%.${digits}f".format(this)
 
     class DatabaseHelper(context: Context, databaseName: String) :
@@ -30,13 +34,48 @@ internal class SqliteWrapper(val context: Context) {
     }
 
     private fun printCursor(cursor: Cursor, startTime: Long): String {
+        var cursorData = mutableListOf<List<String>>()
 
         if (cursor.moveToFirst()) {
 
+            val columnsList = obtainColumnsList(cursor)
+            cursorData.add(columnsList)
+
+            val rowsToFetch = Math.min(cursor.count - 1, DEFAULT_LIMIT)
+            var rowIndex = 0
+
+            do {
+                val row = readRow(cursor)
+                cursorData.add(row)
+            } while (cursor.moveToNext() && rowIndex++ < rowsToFetch)
         }
 
         return printSummary(cursor.count, startTime)
     }
+
+    private fun readRow(cursor: Cursor) =
+        mutableListOf<String>().also {
+            (0..cursor.columnCount).forEach { columnIndex ->
+                when (cursor.getType(columnIndex)) {
+                    Cursor.FIELD_TYPE_STRING -> it.add(cursor.getString(columnIndex))
+                    Cursor.FIELD_TYPE_INTEGER -> it.add("${cursor.getInt(columnIndex)}")
+                    Cursor.FIELD_TYPE_FLOAT -> it.add("${cursor.getFloat(columnIndex)}")
+                    Cursor.FIELD_TYPE_BLOB -> {
+                        val length = cursor.getBlob(columnIndex).size
+                        it.add("[BLOB, $length bytes]")
+                    }
+                    Cursor.FIELD_TYPE_NULL -> it.add("[NULL]")
+                    else -> it.add("Unknown")
+                }
+            }
+        }
+
+    private fun obtainColumnsList(cursor: Cursor) =
+        mutableListOf<String>().also {
+            (0..cursor.columnCount).forEach { columnIndex ->
+                it.add(cursor.getColumnName(columnIndex))
+            }
+        }
 
     private fun printSummary(count: Int, startTime: Long): String {
         val endTime = SystemClock.elapsedRealtime()
