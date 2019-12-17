@@ -94,6 +94,16 @@ class CmdPrompt(Cmd):
             request = self.handle_resource(args)
             self.request_callback(request)
 
+    def do_tables(self, arg):
+        if self.use == SqliteResource.RESOURCE:
+            if self.sqlite_active_db is None:
+                self.print_colored("Please select a database", ConsoleColors.WARNING)
+                return
+            args = self.create_sqlite_args()
+            args.insert(1, "tables")
+            request = self.handle_resource(args)
+            self.request_callback(request)
+
     def do_q(self, arg):
         if self.use == SqliteResource.RESOURCE:
             if self.sqlite_active_db is None:
