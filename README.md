@@ -27,6 +27,7 @@ Connect Android device to the computer, and wait till device is ready, then run:
     - **get** - get key value (e.g. command: get my_key)
   - **sqlite**, Android SQLite wrapper, commands:
     - **databases** - print all databases related to the application context
+    - **tables** - print all tables from selected database
     - **q** - execute SQLite query (e.g. command: q SELECT * FROM table)
 
 #### How to list keys from preferences scope:
