@@ -28,6 +28,8 @@ class CmdPrompt(Cmd):
             args.insert(1, "dump")
             request = self.handle_resource(args)
             self.request_callback(request)
+        else:
+            print("Please use correct resource")
 
     # can be used with only "use"
     def do_scopes(self, arg):
@@ -36,6 +38,8 @@ class CmdPrompt(Cmd):
             args.append("scopes")
             request = self.handle_resource(args)
             self.request_callback(request)
+        else:
+            print("Please use correct resource")
 
     # can be used with "use" and "scope"
     def do_ls(self, arg):
@@ -46,6 +50,8 @@ class CmdPrompt(Cmd):
             args.insert(1, "list")
             request = self.handle_resource(args)
             self.request_callback(request)
+        else:
+            print("Please use correct resource")
 
     def do_get(self, arg):
         if self.use == PreferencesResource.RESOURCE:
@@ -54,6 +60,8 @@ class CmdPrompt(Cmd):
             args.append(arg)
             request = self.handle_resource(args)
             self.request_callback(request)
+        else:
+            print("Please use correct resource")
 
     def do_rm(self, arg):
         self.do_remove(arg)
@@ -64,6 +72,8 @@ class CmdPrompt(Cmd):
             args.append(arg)
             request = self.handle_resource(args)
             self.request_callback(request)
+        else:
+            print("Please use correct resource")
 
     def do_set(self, arg):
         if self.use == PreferencesResource.RESOURCE:
@@ -72,6 +82,8 @@ class CmdPrompt(Cmd):
             args.extend(arg.split())
             request = self.handle_resource(args)
             self.request_callback(request)
+        else:
+            print("Please use correct resource")
 
     def create_prefs_args(self):
         args = []
@@ -93,6 +105,8 @@ class CmdPrompt(Cmd):
             args.insert(1, "databases")
             request = self.handle_resource(args)
             self.request_callback(request)
+        else:
+            print("Please use correct resource")
 
     def do_tables(self, arg):
         if self.use == SqliteResource.RESOURCE:
@@ -103,6 +117,8 @@ class CmdPrompt(Cmd):
             args.insert(1, "tables")
             request = self.handle_resource(args)
             self.request_callback(request)
+        else:
+            print("Please use correct resource")
 
     def do_q(self, arg):
         if self.use == SqliteResource.RESOURCE:
@@ -114,6 +130,8 @@ class CmdPrompt(Cmd):
             args.extend(arg.split())
             request = self.handle_resource(args)
             self.request_callback(request)
+        else:
+            print("Please use correct resource")
 
     def create_sqlite_args(self):
         args = []
