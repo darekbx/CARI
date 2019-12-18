@@ -34,6 +34,23 @@ internal class SqliteWrapper(val context: Context) {
         }
     }
 
+    fun listTables(database: String): List<String> {
+        val tables = mutableListOf<String>()
+        val query = "SELECT name FROM sqlite_master WHERE type='table'"
+        val helper = DatabaseHelper(context, database)
+        helper.writableDatabase.use { db ->
+            db.rawQuery(query, null)
+                ?.takeIf { it.moveToFirst() }
+                ?.use { cursor ->
+                    do {
+                        val name = cursor.getString(0)
+                        tables.add(name)
+                    } while (cursor.moveToNext())
+                }
+        }
+        return tables
+    }
+
     private fun printCursor(cursor: Cursor): List<List<String>> {
         var cursorData = mutableListOf<List<String>>()
 

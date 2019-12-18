@@ -13,7 +13,9 @@ class SqliteResource:
             request = self.create_command_sqlite(command)
         
         if args_count == 3 and command == "tables":
-            request = self.create_command_sqlite(command)
+            database = args[2]
+            arguments = [database]
+            request = self.create_command_sqlite(command, arguments)
 
         if args_count > 2 and command == "q":
             database = args[2]

@@ -17,7 +17,7 @@ internal class SqliteCommandHandler(val context: Context) : BaseCommandHandler()
                     if (commandWrapper.resource == RESOURCE_NAME) {
                         return when (commandWrapper.command) {
                             "databases" -> handleDatabasesList()
-                            "tables" -> handleTablesList()
+                            "tables" -> handleTablesList(commandWrapper)
                             "q" -> handleQuery(commandWrapper)
                             else -> false
                         }
@@ -35,10 +35,9 @@ internal class SqliteCommandHandler(val context: Context) : BaseCommandHandler()
         return createResponse(dataBaseList)
     }
 
-    private fun handleTablesList(): String {
-
-        val tables = "TODO"
-
+    private fun handleTablesList(commandWrapper: CommandWrapper): String {
+        val database = commandWrapper.arguments.get(0)
+        val tables = sqliteWrapper.listTables(database)
         return createResponse(tables)
     }
 
