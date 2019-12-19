@@ -1,3 +1,4 @@
+from consolecolors import ConsoleColors
 
 class SqliteResource:
 
@@ -34,4 +35,15 @@ class SqliteResource:
         return data
 
     def print_pretty(self, response):
-        print(response)
+        if isinstance(response, list):
+            self.print_pretty_list(response)
+        elif isinstance(response, dict):
+            print(response["result"])
+            print(response["summary"])
+        else:
+            print("{1}{0}{2}\n".format(response, ConsoleColors.BOLD, ConsoleColors.ENDC))
+
+    def print_pretty_list(self, response):
+        for item in response:
+            print("{1}{0}{2}".format(item, ConsoleColors.BOLD, ConsoleColors.ENDC))
+        print("\n")
