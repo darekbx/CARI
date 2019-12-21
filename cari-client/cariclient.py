@@ -25,7 +25,7 @@ class CARIClient:
 
     HOST = '127.0.0.1'
     PORT = 38300
-    VERSION = '0.1.0'
+    VERSION = '1.0.0'
 
     ENCODING = "UTF-8"
     LINE_ENDING = "\r\n"
