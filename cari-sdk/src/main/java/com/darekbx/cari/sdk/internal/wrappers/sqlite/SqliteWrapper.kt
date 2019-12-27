@@ -23,20 +23,26 @@ internal class SqliteWrapper(val context: Context) {
         val helper = DatabaseHelper(context, database)
         helper.writableDatabase.use { db ->
             val startTime = SystemClock.elapsedRealtime()
+            var data: List<List<String>> = emptyList()
+
             db.rawQuery(query, null)?.use { cursor ->
-                val cursorCount = cursor.count
-                val data = when (cursorCount) {
-                    0 -> null
-                    else -> printCursor(cursor)
+                if (cursor.count > 0) {
+                    data = printCursor(cursor)
                 }
-                return SqliteResultWrapper(data, obtainSummary(cursorCount, startTime))
-            } ?: return SqliteResultWrapper(null, obtainAffectedRows(db))
+            }
+
+            val count = when {
+                data.size == 0 -> obtainAffectedRows(db)
+                else -> data.size.toLong() - 1L /* -1 because first entry contains information about columns */
+            }
+
+            return SqliteResultWrapper(data, obtainSummary(count, startTime))
         }
     }
 
     fun listTables(database: String): List<String> {
         val tables = mutableListOf<String>()
-        val query = "SELECT name FROM sqlite_master WHERE type='table'"
+        val query = "SELECT name FROM sqlite_master WHERE type = 'table'"
         val helper = DatabaseHelper(context, database)
         helper.writableDatabase.use { db ->
             db.rawQuery(query, null)
@@ -94,20 +100,18 @@ internal class SqliteWrapper(val context: Context) {
             }
         }
 
-    private fun obtainSummary(count: Int, startTime: Long): String {
+    private fun obtainSummary(count: Long, startTime: Long): String {
         val endTime = SystemClock.elapsedRealtime()
         val seconds = (endTime - startTime) / 1000.0
         return "$count rows is set <${seconds.format(2)} sec>"
     }
 
-    private fun obtainAffectedRows(db: SQLiteDatabase): String? {
-        val affectedRowsColumn = "affected_row_count"
-        db.rawQuery("SELECT changes() AS $affectedRowsColumn", null)?.use {
-            if (it.count > 0 && it.moveToFirst()) {
-                val count = it.getLong(it.getColumnIndex(affectedRowsColumn))
-                return "Affected rows: $count"
+    private fun obtainAffectedRows(db: SQLiteDatabase): Long {
+        db.rawQuery("SELECT changes()", null)?.use {
+            if (it.moveToFirst()) {
+                return it.getLong(0)
             }
         }
-        return null
+        return -1L
     }
 }

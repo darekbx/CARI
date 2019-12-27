@@ -39,7 +39,7 @@ class SqliteResource:
         if isinstance(response, list):
             self.print_pretty_list(response)
         elif isinstance(response, dict):
-            if "result" in response:
+            if "result" in response and len(response["result"]) > 0:
                 self.print_query_result(response["result"])
             print(response["summary"])
             print("\n")
