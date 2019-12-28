@@ -53,3 +53,7 @@ Connect Android device to the computer, and wait till device is ready, then run:
   > use room_db   
   5. Type in shell to execute an query: 
   > q SELECT * FROM table ORDER BY _id DESC
+
+<br />
+
+### Any suggestions? Just add an issue.
