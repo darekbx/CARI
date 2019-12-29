@@ -75,9 +75,10 @@ class SqliteResource:
         for index, column in enumerate(columns):
             column_width = columns_width[index]
             data = "| {0: <{width}} ".format("", width=column_width)
-            for i in range(0, len(data)):
+            dot_row += "+"
+            for i in range(1, len(data)):
                 dot_row += "-"
-        dot_row += "-"
+        dot_row += "+"
         return dot_row
 
     def print_column_names(self, columns, columns_width):

@@ -99,6 +99,19 @@ class CmdPrompt(Cmd):
     #
     # SQLITE
     # can be used with only "use"
+    def default(self, arg):
+        if self.use == SqliteResource.RESOURCE and self.sqlite_active_db is not None:
+            self.do_q(arg)
+        else:
+            if self.use is None:
+                self.print_available_scopes()
+            elif self.use == SqliteResource.RESOURCE:
+                print("Available commands: use, databases")
+            elif self.use == PreferencesResource.RESOURCE:
+                print("Available commands: use, dump, scopes")
+            else:
+                print("Unknown command")
+
     def do_databases(self, arg):
         if self.use == SqliteResource.RESOURCE:
             args = self.create_sqlite_args()
@@ -156,10 +169,14 @@ class CmdPrompt(Cmd):
                 self.use = arg
                 self.prompt = "CARI ({0})$ ".format(arg)
             else:
-                self.print_colored("Unknown resource", ConsoleColors.WARNING)
-                print("Available resources:")
-                for name in resources_names:
-                    print("{1}\t{0}{2}".format(name, ConsoleColors.HEADER, ConsoleColors.ENDC).expandtabs(4))
+                self.print_available_scopes()
+
+    def print_available_scopes(self):
+        self.print_colored("Unknown resource", ConsoleColors.WARNING)
+        print("Available resources:")
+        resources_names = [resource.RESOURCE for resource in self.resources]
+        for name in resources_names:
+            print("{1}\t{0}{2}".format(name, ConsoleColors.HEADER, ConsoleColors.ENDC).expandtabs(4))
 
     def do_clear(self, arg):
         self.use = None
