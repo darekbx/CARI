@@ -21,22 +21,26 @@ internal class SqliteWrapper(val context: Context) {
 
     fun execute(database: String, query: String): SqliteResultWrapper? {
         val helper = DatabaseHelper(context, database)
+        val columnsRowsOffset = 1L /* because first entry contains information about columns */
         helper.writableDatabase.use { db ->
             val startTime = SystemClock.elapsedRealtime()
             var data: List<List<String>> = emptyList()
+            var limitedRows = 0
 
             db.rawQuery(query, null)?.use { cursor ->
-                if (cursor.count > 0) {
+                val count = cursor.count
+                if (count > 0) {
                     data = printCursor(cursor)
+                    limitedRows = count - data.size + columnsRowsOffset.toInt()
                 }
             }
 
             val count = when {
                 data.size == 0 -> obtainAffectedRows(db)
-                else -> data.size.toLong() - 1L /* -1 because first entry contains information about columns */
+                else -> data.size.toLong() - columnsRowsOffset
             }
 
-            return SqliteResultWrapper(data, obtainSummary(count, startTime))
+            return SqliteResultWrapper(data, obtainSummary(count, startTime), limitedRows)
         }
     }
 
@@ -64,7 +68,7 @@ internal class SqliteWrapper(val context: Context) {
             val columnsList = obtainColumnsList(cursor)
             cursorData.add(columnsList)
 
-            val rowsToFetch = Math.min(cursor.count - 1, DEFAULT_LIMIT)
+            val rowsToFetch = Math.min(cursor.count, DEFAULT_LIMIT) - 1
             var rowIndex = 0
 
             do {

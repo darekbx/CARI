@@ -41,6 +41,8 @@ class SqliteResource:
         elif isinstance(response, dict):
             if "result" in response and len(response["result"]) > 0:
                 self.print_query_result(response["result"])
+            if "limitedRows" in response and int(response["limitedRows"]) > 0:
+                print("Result is limited, there's {0} more rows.".format(response["limitedRows"]))
             print(response["summary"])
             print("\n")
         else:
