@@ -14,21 +14,24 @@ Connect Android device to the computer, and wait till device is ready, then run:
   - **-p** provide custom port for forward, default is 38300
 
 #### Shell commands
-  - **use** {resource|prefs_scope|sqlite_database}  - Use resource, scope or sqlite database for further actions
+  - **use** [resource|prefs_scope|sqlite_database]  - Use resource, scope or sqlite database for further actions
   - **clear**                                       - Clear used resource and scopes
   - **version**                                     - Print CARI Android SDK version
 
 #### Resources
   - **prefs**, Android shared preferences wrapper, commands:
-    - **dump** - print all preferences data (can be used with scope)
+    - **scopes** - print all preferences scopes, related to the application context
+    - **use** - select preferences scope for further actions
+    - **dump** - print all preferences data (can be used with and without scope)
     - **list** - list all keys  (e.g. command: list)
     - **remove** - remove key with value  (e.g. command: remove KeyToDelete)
     - **set** - set value to key (e.g. command: set new_key KeyValue)
     - **get** - get key value (e.g. command: get my_key)
   - **sqlite**, Android SQLite wrapper, commands:
-    - **databases** - print all databases related to the application context
+    - **databases** - print all databases, related to the application context
+    - **use** - select sqlite database for further actions
     - **tables** - print all tables from selected database
-    - **q** - execute SQLite query (e.g. command: q SELECT * FROM table)
+    - **[query]** - execute SQLite query, when database is used (e.g. command: SELECT * FROM table or with prefix: q SELECT 1)
 
 #### How to list keys from preferences scope:
   1. Run CARI: 
