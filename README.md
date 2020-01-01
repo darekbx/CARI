@@ -57,6 +57,32 @@ Connect Android device to the computer, and wait till device is ready, then run:
   5. Type in shell to execute an query: 
   > q SELECT * FROM table ORDER BY _id DESC
 
+#### Android integration
+  1. Download latest **.aar** lib from **./releases** dir
+  2. Add to application **build.gradle** file:
+  ```groovy
+  allprojects {
+      repositories {
+         flatDir {
+             dirs 'libs'
+         }
+      }
+  }
+  ```
+  3. Add to application **build.gardle** dependency:
+  ```groovy
+  implementation(name:'cari-sdk-release-1.0.0', ext:'aar')
+  ```
+  4. Initialize CARI in your Application class:
+  ```kotlin
+  class MyApplication : Application() {
+      override fun onCreate() {
+          super.onCreate()
+          CARI.initialize(applicationContext)
+      }
+  }
+  ```
+
 <br />
 
 ### Any suggestions? Just add an issue.
