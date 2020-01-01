@@ -58,8 +58,8 @@ Connect Android device to the computer, and wait till device is ready, then run:
   > q SELECT * FROM table ORDER BY _id DESC
 
 #### Android integration
-  1. Download latest **.aar** lib from **./releases** dir
-  2. Add to application **build.gradle** file:
+  1. Download latest **.aar** lib from **./releases** dir and place in project **libs** directory
+  2. Add to project **build.gradle** file those lines:
   ```groovy
   allprojects {
       repositories {
@@ -69,7 +69,7 @@ Connect Android device to the computer, and wait till device is ready, then run:
       }
   }
   ```
-  3. Add to application **build.gardle** dependency:
+  3. Add to project **build.gardle** filr dependency:
   ```groovy
   implementation(name:'cari-sdk-release-1.0.0', ext:'aar')
   ```
