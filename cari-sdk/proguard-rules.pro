@@ -19,3 +19,12 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Gson
+-keepattributes Signature
+-keep class sun.misc.Unsafe { *; }
+-keep public class com.google.gson
+
+# CARI
+-keep public class com.darekbx.cari.sdk.**
+-keepclassmembers public class com.darekbx.cari.sdk.** { *; }
