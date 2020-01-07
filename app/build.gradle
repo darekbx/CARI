@@ -52,8 +52,8 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
     // When app should use library project
-    implementation project(path: ':cari-sdk')
+    //implementation project(path: ':cari-sdk')
 
     // When app should use .aar file
-    //implementation(name:'cari-sdk-release-1.0.0', ext:'aar')
+    implementation(name:'cari-sdk-release-1.0.1', ext:'aar')
 }
