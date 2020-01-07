@@ -10,7 +10,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.1"
 
         consumerProguardFiles 'consumer-rules.pro'
     }
@@ -35,9 +35,9 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1"
-    implementation 'com.google.code.gson:gson:2.8.6'
 
     testImplementation 'androidx.test:core:1.0.0'
     testImplementation 'org.robolectric:robolectric:4.3'
     testImplementation 'junit:junit:4.12'
+    testImplementation 'com.google.code.gson:gson:2.8.6'
 }

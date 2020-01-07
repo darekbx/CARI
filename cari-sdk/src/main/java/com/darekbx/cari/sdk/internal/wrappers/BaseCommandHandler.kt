@@ -1,9 +1,9 @@
 package com.darekbx.cari.sdk.internal.wrappers
 
 import com.darekbx.cari.BuildConfig
+import com.darekbx.cari.sdk.internal.json.JsonParser
 import com.darekbx.cari.sdk.internal.model.ErrorWrapper
 import com.darekbx.cari.sdk.internal.model.ResponseWrapper
-import com.google.gson.Gson
 import java.lang.Exception
 
 internal abstract class BaseCommandHandler {
@@ -14,7 +14,7 @@ internal abstract class BaseCommandHandler {
 
     protected inline fun <reified T: Any> parseCommand(commandString: String): T? {
         try {
-            return gson.fromJson(commandString, T::class.java)
+            return JsonParser.parse(commandString) as T
         } catch (e: Exception) {
             if (BuildConfig.DEBUG) {
                 e.printStackTrace()
@@ -27,7 +27,7 @@ internal abstract class BaseCommandHandler {
         try {
             val type = obtainType()
             val wrapper = ResponseWrapper(type, response)
-            return gson.toJson(wrapper)
+            return JsonParser.toJson(wrapper)
         } catch (e: Exception) {
             if (BuildConfig.DEBUG) {
                 e.printStackTrace()
@@ -38,8 +38,6 @@ internal abstract class BaseCommandHandler {
 
     protected fun createErrorResponse(errorMessage: String): String {
         val errorWrapper = ErrorWrapper(errorMessage)
-        return gson.toJson(errorWrapper)
+        return JsonParser.toJson(errorWrapper)
     }
-
-    protected val gson by lazy { Gson() }
 }
