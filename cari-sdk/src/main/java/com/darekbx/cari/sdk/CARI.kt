@@ -5,12 +5,12 @@ import com.darekbx.cari.sdk.internal.communication.CompressionUtil
 import kotlinx.coroutines.Job
 
 import com.darekbx.cari.sdk.internal.communication.SocketCommunication
+import com.darekbx.cari.sdk.internal.json.JsonParser
 import com.darekbx.cari.sdk.internal.model.ErrorWrapper
 import com.darekbx.cari.sdk.internal.wrappers.BaseCommandHandler
 import com.darekbx.cari.sdk.internal.wrappers.common.CommonCommandHandler
 import com.darekbx.cari.sdk.internal.wrappers.preferences.PreferencesCommandHandler
 import com.darekbx.cari.sdk.internal.wrappers.sqlite.SqliteCommandHandler
-import com.google.gson.Gson
 
 object CARI {
 
@@ -55,9 +55,7 @@ object CARI {
 
     private fun notifyError(): String {
         val error = ErrorWrapper("Unknown command")
-        val result = gson.toJson(error)
+        val result = JsonParser.toJson(error)
         return CompressionUtil.encodeData(result)
     }
-
-    private val gson by lazy { Gson() }
 }
