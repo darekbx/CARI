@@ -54,9 +54,6 @@ dependencies {
     // When app should use library project
     //implementation project(path: ':cari-sdk')
 
-    // When app should use .aar file
-    implementation(name:'cari-sdk-release-1.0.1', ext:'aar')
-
-    //implementation 'com.github.darekbx.CARI:1.0.1'
-    //implementation 'com.github.darekbx.CARI:cari-sdk:1.0.1'
+    // Remote implementation
+    implementation 'com.github.darekbx:CARI:1.0.2'
 }
