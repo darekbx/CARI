@@ -61,11 +61,11 @@ Connect Android device to the computer, and wait till device is ready, then run:
   1. Add to project **build.gradle** file those lines:
   ```groovy
   allprojects {
-	  repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
-	}
+    repositories {
+      ...
+      maven { url 'https://jitpack.io' }
+    }
+  }
   ```
   2. Add to project **build.gardle** CARI sdk dependency:
   ```groovy
