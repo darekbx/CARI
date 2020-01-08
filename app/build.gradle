@@ -2,9 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.github.dcendents.android-maven'
-
-group = 'com.github.darekbx'
 
 allprojects {
     repositories {
@@ -58,7 +55,8 @@ dependencies {
     //implementation project(path: ':cari-sdk')
 
     // When app should use .aar file
-    //implementation(name:'cari-sdk-release-1.0.1', ext:'aar')
+    implementation(name:'cari-sdk-release-1.0.1', ext:'aar')
 
-    implementation 'com.github.darekbx:CARI:v1.0.1-aar'
+    //implementation 'com.github.darekbx.CARI:1.0.1'
+    //implementation 'com.github.darekbx.CARI:cari-sdk:1.0.1'
 }
