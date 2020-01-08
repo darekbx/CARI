@@ -55,7 +55,7 @@ Connect Android device to the computer, and wait till device is ready, then run:
   4. Select database, by typing in shell: 
   > use room_db   
   5. Type in shell to execute an query: 
-  > q SELECT * FROM table ORDER BY _id DESC
+  > SELECT * FROM table ORDER BY _id DESC
 
 #### Android integration
   1. Add to project **build.gradle** file those lines:
