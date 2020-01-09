@@ -7,7 +7,9 @@ Installed Android Debug Bridge (adb), python3.
 
 #### How to use
 Connect Android device to the computer, and wait till device is ready, then run: 
-> python3 cariclient.py
+> python3 cari-client-standalone.py
+
+**cari-client-standalone.py** file is a compressed version of cari client, this file can be downloaded from release assets.
 
 #### Options
   - **-d** provide a device
