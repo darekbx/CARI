@@ -2,23 +2,25 @@
 
 Android tool used to view and edit resources like Preferences and Sqlite database.
 
-#### Requirements
+### Requirements
 Installed Android Debug Bridge (adb), python3.
 
-#### How to use
+### How to use
 Connect Android device to the computer, and wait till device is ready, then run: 
-> python3 cariclient.py
+> python3 cari-client-standalone.py
 
-#### Options
+**cari-client-standalone.py** file is a compressed version of cari client, this file can be downloaded from release assets.
+
+### Options
   - **-d** provide a device
   - **-p** provide custom port for forward, default is 38300
 
-#### Shell commands
+### Shell commands
   - **use** [resource|prefs_scope|sqlite_database]  - Use resource, scope or sqlite database for further actions
   - **clear**                                       - Clear used resource and scopes
   - **version**                                     - Print CARI Android SDK version
 
-#### Resources
+### Resources
   - **prefs**, Android shared preferences wrapper, commands:
     - **scopes** - print all preferences scopes, related to the application context
     - **use** - select preferences scope for further actions
@@ -33,9 +35,9 @@ Connect Android device to the computer, and wait till device is ready, then run:
     - **tables** - print all tables from selected database
     - **[query]** - execute SQLite query, when database is used (e.g. command: SELECT * FROM table or with prefix: q SELECT 1)
 
-#### How to list keys from preferences scope:
+### How to list keys from preferences scope:
   1. Run CARI: 
-  > python3 cariclient.py
+  > python3 cari-client-standalone.py
   2. In CARI shell type: 
   > use prefs
   3. Dump all scopes, by typing in shell: 
@@ -45,9 +47,9 @@ Connect Android device to the computer, and wait till device is ready, then run:
   5. Type in shell to list all keys: 
   > list
   
-#### How to execute an SQLite query:
+### How to execute an SQLite query:
   1. Run CARI: 
-  > python3 cariclient.py
+  > python3 cari-client-standalone.py
   2. In CARI shell type: 
   > use sqlite
   3. Print all databases, by typing in shell: 
@@ -55,9 +57,9 @@ Connect Android device to the computer, and wait till device is ready, then run:
   4. Select database, by typing in shell: 
   > use room_db   
   5. Type in shell to execute an query: 
-  > q SELECT * FROM table ORDER BY _id DESC
+  > SELECT * FROM table ORDER BY _id DESC
 
-#### Android integration
+### Android integration
   1. Add to project **build.gradle** file those lines:
   ```groovy
   allprojects {
