@@ -1,9 +1,6 @@
 package com.darekbx.cari.sdk.internal.communication
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import android.os.AsyncTask
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
@@ -13,15 +10,12 @@ internal class SocketCommunication(val port: Int) {
 
     private val CHARSET = Charsets.UTF_8
 
-    val supervisiorJob = SupervisorJob()
-    private val ioScope = CoroutineScope(Dispatchers.IO + supervisiorJob)
-
     var callback: ((receivedData: String) -> String)? = null
 
     fun start() {
-        ioScope.launch {
+        AsyncTask.execute {
             val serverSocket = ServerSocket(port)
-            while (supervisiorJob.isActive) {
+            while (true) {
 
                 val socketRead = serverSocket.accept()
 

@@ -52,8 +52,8 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
     // When app should use library project
-    //implementation project(path: ':cari-sdk')
+    implementation project(path: ':cari-sdk')
 
     // Remote implementation
-    implementation 'com.github.darekbx:CARI:1.0.2'
+    //implementation 'com.github.darekbx:CARI:1.0.2'
 }

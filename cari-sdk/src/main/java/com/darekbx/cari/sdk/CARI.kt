@@ -2,7 +2,6 @@ package com.darekbx.cari.sdk
 
 import android.content.Context
 import com.darekbx.cari.sdk.internal.communication.CompressionUtil
-import kotlinx.coroutines.Job
 
 import com.darekbx.cari.sdk.internal.communication.SocketCommunication
 import com.darekbx.cari.sdk.internal.json.JsonParser
@@ -19,11 +18,8 @@ object CARI {
      *
      * @param context Use application context, cannot be null.
      * @param options Optional arguments, you can set for eg. different port.
-     *
-     * @return Job responsible for module communication.
-     *         You can use this job to stop processing, when app is being destroyed
      */
-    fun initialize(context: Context, options: Options = Options()): Job {
+    fun initialize(context: Context, options: Options = Options()) {
 
         val commandHandlers = listOf(
             PreferencesCommandHandler(context),
@@ -32,15 +28,13 @@ object CARI {
         )
 
         val port = options.port
-        val socketCommunication = SocketCommunication(port).apply {
+        SocketCommunication(port).apply {
             callback = { encodedCommand ->
                 val command = CompressionUtil.decodeData(encodedCommand)
                 handleCommand(command, commandHandlers)
             }
             start()
         }
-
-        return socketCommunication.supervisiorJob
     }
 
     private fun handleCommand(command: String, handlers: List<BaseCommandHandler>): String {
