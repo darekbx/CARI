@@ -3,26 +3,20 @@ package com.darekbx.cari.sdk.internal.wrappers.sqlite
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
 import android.os.SystemClock
 import com.darekbx.cari.sdk.internal.model.SqliteResultWrapper
 
 internal class SqliteWrapper(val context: Context) {
 
-    companion object val DEFAULT_LIMIT = 50
+    companion object
+
+    val DEFAULT_LIMIT = 50
 
     fun Double.format(digits: Int) = "%.${digits}f".format(this)
 
-    class DatabaseHelper(context: Context, databaseName: String) :
-        SQLiteOpenHelper(context, databaseName, null, 1) {
-        override fun onCreate(db: SQLiteDatabase?) {}
-        override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {}
-    }
-
     fun execute(database: String, query: String): SqliteResultWrapper? {
-        val helper = DatabaseHelper(context, database)
         val columnsRowsOffset = 1L /* because first entry contains information about columns */
-        helper.writableDatabase.use { db ->
+        openDatabase(database).use { db ->
             val startTime = SystemClock.elapsedRealtime()
             var data: List<List<String>> = emptyList()
             var limitedRows = 0
@@ -47,8 +41,7 @@ internal class SqliteWrapper(val context: Context) {
     fun listTables(database: String): List<String> {
         val tables = mutableListOf<String>()
         val query = "SELECT name FROM sqlite_master WHERE type = 'table'"
-        val helper = DatabaseHelper(context, database)
-        helper.writableDatabase.use { db ->
+        openDatabase(database).use { db ->
             db.rawQuery(query, null)
                 ?.takeIf { it.moveToFirst() }
                 ?.use { cursor ->
@@ -118,4 +111,11 @@ internal class SqliteWrapper(val context: Context) {
         }
         return -1L
     }
+
+    private fun openDatabase(database: String) =
+        SQLiteDatabase.openDatabase(
+            context.getDatabasePath(database).absolutePath,
+            null,
+            SQLiteDatabase.OPEN_READWRITE
+        )
 }

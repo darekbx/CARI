@@ -2,6 +2,8 @@ package com.darekbx.cari.testapplication.testdata.roomdatabase
 
 import android.content.Context
 import androidx.room.*
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +26,7 @@ class TestRoomDatabase {
         @ColumnInfo(name = "address") var address: String = ""
     )
 
-    @Database(entities = arrayOf(PersonDto::class, CompanyDto::class), version = 1)
+    @Database(entities = arrayOf(PersonDto::class, CompanyDto::class), version = 3)
     abstract class TestDatabase : RoomDatabase() {
 
         companion object {
@@ -50,7 +52,14 @@ class TestRoomDatabase {
 
     fun createTestDatabase(context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
-            val database = Room.databaseBuilder(context, TestDatabase::class.java, TestDatabase.DB_NAME).build()
+            val database = Room.databaseBuilder(context, TestDatabase::class.java, TestDatabase.DB_NAME)
+                .addMigrations(object: Migration(1, 2) {
+                    override fun migrate(database: SupportSQLiteDatabase) { }
+                })
+                .addMigrations(object: Migration(2, 3) {
+                    override fun migrate(database: SupportSQLiteDatabase) { }
+                })
+                .build()
             with (database){
                 clearAllTables()
 
