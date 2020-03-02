@@ -49,8 +49,10 @@ class CARIClient:
     def check_status(self):
         version_request = "version"
         result = self.write_and_receive(version_request)
-        result_array = json.loads(result)
-        self.print_colored(" ".join(result_array["response"]), ConsoleColors.OKGREEN)
+        response_map = json.loads(result)["response"]
+        for key in response_map:
+            self.print_colored("{0}: {1}".format(key, response_map[key]), ConsoleColors.OKGREEN, new_line='')
+        print("\n")
 
     def execute(self):
         if self.initialized:
@@ -127,8 +129,8 @@ class CARIClient:
         decompressed = gzip.decompress(data_bytes)
         return decompressed
     
-    def print_colored(self, message, color):
-        print("{1}{0}{2}\n".format(message, color, ConsoleColors.ENDC))
+    def print_colored(self, message, color, new_line = "\n"):
+        print("{1}{0}{2}{3}".format(message, color, ConsoleColors.ENDC, new_line))
 
 client = CARIClient()
 client.execute()

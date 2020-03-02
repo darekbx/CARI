@@ -27,7 +27,10 @@ internal class CommonCommandHandler (val context: Context) : BaseCommandHandler(
     override fun obtainType() = RESOURCE_NAME
 
     private fun handleVersion(): String {
-        val result = arrayOf("SDK-Version", BuildConfig.VERSION_NAME)
+        val result = mapOf(
+            "SDK-Version" to BuildConfig.VERSION_NAME,
+            "Application" to context.packageName
+        )
         return createResponse(result)
     }
 }
