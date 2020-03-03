@@ -123,12 +123,17 @@ class CARIClient:
         return base64.b64encode(compressed).decode(self.ENCODING)
     
     def decode_data(self, data):
+        print(data)
         data_bytes = base64.b64decode(data.decode(self.ENCODING))
         decompressed = gzip.decompress(data_bytes)
         return decompressed
     
     def print_colored(self, message, color):
         print("{1}{0}{2}\n".format(message, color, ConsoleColors.ENDC))
+
+if sys.version_info[0] < 3:
+    print("{1}{0}{2}\n".format("CARI supports only Python 3", ConsoleColors.FAIL, ConsoleColors.ENDC))
+    exit()
 
 client = CARIClient()
 client.execute()
