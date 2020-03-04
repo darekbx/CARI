@@ -7,6 +7,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 class TestRoomDatabase {
 
@@ -72,6 +73,18 @@ class TestRoomDatabase {
                     add(PersonDto(name = "Daniel Brown", age = 56, active = false, companyId = companyOneId))
                     add(PersonDto(name = "Mike Miller", age = 19, active = true, companyId = companyTwoId))
                     add(PersonDto(name = "Stanley Wilson", age = 43, active = true, companyId = companyTwoId))
+
+                    val random = Random()
+                    (0..100).forEach { i ->
+                        add(
+                            PersonDto(
+                                name = (0..200).joinToString(),
+                                age = random.nextInt(100),
+                                active = true,
+                                companyId = companyOneId
+                            )
+                        )
+                    }
                 }
 
                 close()

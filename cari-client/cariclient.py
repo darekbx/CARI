@@ -25,7 +25,7 @@ class CARIClient:
 
     HOST = '127.0.0.1'
     PORT = 38300
-    VERSION = '1.0.0'
+    VERSION = '1.0.1'
 
     ENCODING = "UTF-8"
     LINE_ENDING = "\r\n"
@@ -108,7 +108,13 @@ class CARIClient:
             encoded_value = "{0}{1}".format(encoded_value, self.LINE_ENDING)
             s.send(bytes(encoded_value, self.ENCODING))
 
-            encoded_response = s.recv(1024)
+            encoded_response = ''
+            while True:
+                chunk = s.recv(1024)
+                if not chunk or chunk[-1] == '\n':
+                    break
+                else:
+                    encoded_response += chunk.decode()
             response = self.decode_data(encoded_response)
             
             s.close()
@@ -125,8 +131,7 @@ class CARIClient:
         return base64.b64encode(compressed).decode(self.ENCODING)
     
     def decode_data(self, data):
-        print(data)
-        data_bytes = base64.b64decode(data.decode(self.ENCODING))
+        data_bytes = base64.b64decode(data + "==")
         decompressed = gzip.decompress(data_bytes)
         return decompressed
     
