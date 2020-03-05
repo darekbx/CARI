@@ -87,6 +87,8 @@ Connect Android device to the computer, and wait till device is ready, then run:
 
 ### Any suggestions? Just add an issue.
 
+<br />
+
 ### License
 ```
 Copyright 2019 DarekBx
