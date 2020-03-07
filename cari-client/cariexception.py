@@ -1,0 +1,3 @@
+
+class CARIException(Exception):
+    pass

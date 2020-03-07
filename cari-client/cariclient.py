@@ -12,6 +12,7 @@ from preferencesresource import PreferencesResource
 from sqliteresource import SqliteResource
 from cmdprompt import CmdPrompt
 from consolecolors import ConsoleColors
+from cariexception import CARIException
 
 '''
 CARI (Console Android Resources Inspector)
@@ -43,6 +44,8 @@ class CARIClient:
             self.port, self.device = self.arguments_handler.process()
             self.check_status()
             self.initialized = True
+        except CARIException as ce:
+            self.print_colored(ce, ConsoleColors.WARNING)
         except:
             self.print_colored("Device with SDK is unavailable", ConsoleColors.FAIL)
 
