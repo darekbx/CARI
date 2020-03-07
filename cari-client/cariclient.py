@@ -17,6 +17,9 @@ from cariexception import CARIException
 '''
 CARI (Console Android Resources Inspector)
 Client used to communicate with Android device
+
+How to pack to one file:
+stickytape CARI/cari-client/cariclient.py  --add-python-path . --output-file ./cari-client-standalone.py
 '''
 class CARIClient:
 
