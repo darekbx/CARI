@@ -71,7 +71,7 @@ Connect Android device to the computer, and wait till device is ready, then run:
   ```
   2. Add to project **build.gardle** CARI sdk dependency:
   ```groovy
-  implementation 'com.github.darekbx:CARI:1.0.3'
+  implementation 'com.github.darekbx:CARI:1.0.6'
   ```
   3. Initialize CARI in your Application class:
   ```kotlin
