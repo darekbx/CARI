@@ -78,7 +78,7 @@ internal class SqliteWrapper(val context: Context) {
             (0..cursor.columnCount - 1).forEach { columnIndex ->
                 when (cursor.getType(columnIndex)) {
                     Cursor.FIELD_TYPE_STRING -> it.add(cursor.getString(columnIndex))
-                    Cursor.FIELD_TYPE_INTEGER -> it.add("${cursor.getInt(columnIndex)}")
+                    Cursor.FIELD_TYPE_INTEGER -> it.add("${cursor.getLong(columnIndex)}")
                     Cursor.FIELD_TYPE_FLOAT -> it.add("${cursor.getFloat(columnIndex)}")
                     Cursor.FIELD_TYPE_BLOB -> {
                         val length = cursor.getBlob(columnIndex).size

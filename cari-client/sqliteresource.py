@@ -57,7 +57,7 @@ class SqliteResource:
         columns = result[0]
         rows = result[1:]
 
-        column_min_width = 15
+        column_min_width = 20
         columns_width = []
 
         for column in columns:

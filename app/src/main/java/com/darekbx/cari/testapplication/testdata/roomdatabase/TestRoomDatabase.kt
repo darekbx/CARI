@@ -17,7 +17,8 @@ class TestRoomDatabase {
         @ColumnInfo(name = "name") var name: String = "",
         @ColumnInfo(name = "age") var age: Int = 0,
         @ColumnInfo(name = "active") var active: Boolean = false,
-        @ColumnInfo(name = "company_id") var companyId: Long? = null
+        @ColumnInfo(name = "company_id") var companyId: Long? = null,
+        @ColumnInfo(name = "created") var created: Long? = null
     )
 
     @Entity(tableName = "company")
@@ -67,12 +68,13 @@ class TestRoomDatabase {
                 val companyDao = copanyDao()
                 val companyOneId = companyDao.add(CompanyDto(name = "Company One", address = "Milky Road 1, 02412 NY"))
                 val companyTwoId = companyDao.add(CompanyDto(name = "Company Two", address = "Star Road 42, 46321 LA"))
+                val now = Calendar.getInstance().timeInMillis
 
                 personDao().run {
-                    add(PersonDto(name = "John Smith", age = 35, active = true, companyId = companyOneId))
-                    add(PersonDto(name = "Daniel Brown", age = 56, active = false, companyId = companyOneId))
-                    add(PersonDto(name = "Mike Miller", age = 19, active = true, companyId = companyTwoId))
-                    add(PersonDto(name = "Stanley Wilson", age = 43, active = true, companyId = companyTwoId))
+                    add(PersonDto(name = "John Smith", age = 35, active = true, companyId = companyOneId, created = now))
+                    add(PersonDto(name = "Daniel Brown", age = 56, active = false, companyId = companyOneId, created = now))
+                    add(PersonDto(name = "Mike Miller", age = 19, active = true, companyId = companyTwoId, created = now))
+                    add(PersonDto(name = "Stanley Wilson", age = 43, active = true, companyId = companyTwoId, created = now))
 
                     val random = Random()
                     (0..100).forEach { i ->
@@ -81,7 +83,8 @@ class TestRoomDatabase {
                                 name = (0..200).joinToString(),
                                 age = random.nextInt(100),
                                 active = true,
-                                companyId = companyOneId
+                                companyId = companyOneId,
+                                created = now
                             )
                         )
                     }

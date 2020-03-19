@@ -19,7 +19,7 @@ CARI (Console Android Resources Inspector)
 Client used to communicate with Android device
 
 How to pack to one file:
-stickytape CARI/cari-client/cariclient.py  --add-python-path . --output-file ./cari-client-standalone.py
+stickytape cariclient.py  --add-python-path . --output-file ./cari-client-standalone.py
 '''
 class CARIClient:
 
@@ -29,7 +29,7 @@ class CARIClient:
 
     HOST = '127.0.0.1'
     PORT = 38300
-    VERSION = '1.0.1'
+    VERSION = '1.0.2'
 
     ENCODING = "UTF-8"
     LINE_ENDING = "\r\n"
