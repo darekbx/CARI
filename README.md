@@ -1,5 +1,7 @@
 # CARI (Console Android Resources Inspector)
 
+[![](https://jitpack.io/v/darekbx/CARI.svg)](https://jitpack.io/#darekbx/CARI)
+
 Android tool used to view and edit resources like Preferences and Sqlite database.
 
 ### Requirements
