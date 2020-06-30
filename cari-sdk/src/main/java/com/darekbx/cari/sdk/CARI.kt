@@ -1,13 +1,7 @@
 package com.darekbx.cari.sdk
 
-import android.annotation.TargetApi
-import android.app.*
 import android.content.Context
-import android.content.Intent
-import android.graphics.drawable.Icon
-import android.os.Build
-import com.darekbx.cari.R
-import com.darekbx.cari.sdk.internal.bubble.BubbleActivity
+import com.darekbx.cari.sdk.internal.bubble.BubbleNotification
 import com.darekbx.cari.sdk.internal.communication.CompressionUtil
 import com.darekbx.cari.sdk.internal.communication.SocketCommunication
 import com.darekbx.cari.sdk.internal.json.JsonParser
@@ -43,49 +37,7 @@ object CARI {
         }
 
         if (options.isBubbleEnabled) {
-            createBubble(context)
-        }
-    }
-
-    private fun createBubble(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val CHANNEL_ID = "bubble_channel_id"
-            val target = Intent(context, BubbleActivity::class.java)
-            val bubbleIntent = PendingIntent.getActivity(context, 0, target, 0 /* flags */)
-
-            // Create bubble metadata
-            val bubbleData = Notification.BubbleMetadata.Builder()
-                .setDesiredHeight(600)
-                .setIcon(Icon.createWithResource(context, com.darekbx.cari.R.drawable.ic_tree))
-                .setIntent(bubbleIntent)
-                .build()
-
-            // Create notification
-            val chatBot = Person.Builder()
-                .setBot(true)
-                .setName("BubbleBot")
-                .setImportant(true)
-                .build()
-
-            val builder = Notification.Builder(context, CHANNEL_ID)
-                .setContentIntent(bubbleIntent)
-                .setSmallIcon(com.darekbx.cari.R.drawable.ic_arrow_back)
-                .setBubbleMetadata(bubbleData)
-                .addPerson(chatBot)
-
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-            var channel = notificationManager.getNotificationChannel(CHANNEL_ID)
-            if (channel == null) {
-                channel = NotificationChannel(
-                    CHANNEL_ID,
-                    "app name",
-                    NotificationManager.IMPORTANCE_HIGH
-                )
-                notificationManager.createNotificationChannel(channel)
-            }
-
-            notificationManager.notify(1, builder.build())
+            BubbleNotification(context).createBubble()
         }
     }
 
@@ -104,5 +56,4 @@ object CARI {
         val result = JsonParser.toJson(error)
         return CompressionUtil.encodeData(result)
     }
-
 }

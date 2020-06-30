@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="DefaultButton" parent="android:style/Widget.Material.Button.Colored">
+        <item name="android:backgroundTint">#607D8B</item>
+        <item name="android:typeface">monospace</item>
+    </style>
+</resources>

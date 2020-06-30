@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">CARI</string>
-    <string name="notification_active">CARI is active</string>
-    <string name="notification_channel_name">CARI Notification</string>
+    <string name="bubble_title">CARI Bubble</string>
+    <string name="please_select">Please select a resource from the bottom menu</string>
+    <string name="preferences_tree_title">Preferences</string>
 </resources>

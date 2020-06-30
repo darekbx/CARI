@@ -29,6 +29,11 @@ internal class PreferencesWrapper(val context: Context) {
         return preferences.all.keys.toList()
     }
 
+    fun dumpScope(scope: String): Map<String, *> {
+        val preferences = providePreferences(scope)
+        return preferences.all
+    }
+
     fun getValue(scope: String, key: String): String? {
         val preferences = providePreferences(scope)
         val entry = preferences
