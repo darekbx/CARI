@@ -1,5 +1,7 @@
 # CARI (Console Android Resources Inspector)
 
+[![](https://jitpack.io/v/darekbx/CARI.svg)](https://jitpack.io/#darekbx/CARI)
+
 Android tool used to view and edit resources like Preferences and Sqlite database.
 
 ### Requirements
@@ -71,7 +73,7 @@ Connect Android device to the computer, and wait till device is ready, then run:
   ```
   2. Add to project **build.gardle** CARI sdk dependency:
   ```groovy
-  implementation 'com.github.darekbx:CARI:1.0.6'
+  implementation 'com.github.darekbx:CARI:{latest release}'
   ```
   3. Initialize CARI in your Application class:
   ```kotlin
