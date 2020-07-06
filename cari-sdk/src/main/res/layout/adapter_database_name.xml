@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#1999">
+    <TextView
+        android:id="@+id/database_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:typeface="monospace"
+        android:textColor="#111"
+        android:layout_marginStart="30dp"
+        android:padding="4dp"
+        tools:text="MainApplication"
+        android:ellipsize="end"
+        />
+</LinearLayout>

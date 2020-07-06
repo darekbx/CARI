@@ -3,4 +3,5 @@
     <string name="bubble_title">CARI Bubble</string>
     <string name="please_select">Please select a resource from the bottom menu</string>
     <string name="preferences_tree_title">Preferences</string>
+    <string name="databases_tree_title">Databases</string>
 </resources>

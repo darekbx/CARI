@@ -4,6 +4,8 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import com.darekbx.cari.R
+import com.darekbx.cari.sdk.internal.bubble.database.DatabaseParser
+import com.darekbx.cari.sdk.internal.bubble.database.DatabasesAdapter
 import com.darekbx.cari.sdk.internal.bubble.preferences.PreferencesAdapter
 import com.darekbx.cari.sdk.internal.bubble.preferences.PreferencesParser
 import kotlinx.android.synthetic.main.activity_bubble.*
@@ -29,15 +31,25 @@ class BubbleActivity : Activity() {
             MODE_PREFERENCES -> {
                 val scopesList = PreferencesParser(this).parse()
 
+                databases_container.visibility = View.GONE
                 preferences_container.visibility = View.VISIBLE
                 preferences_tree_hint.setText(R.string.preferences_tree_title)
 
                 preferences_tree.setAdapter(PreferencesAdapter(this).apply {
                   scopes = scopesList
                 })
-
             }
-            MODE_DATABASE -> {}
+            MODE_DATABASE -> {
+                val databaseItems = DatabaseParser(this).readDatabases()
+
+                preferences_container.visibility = View.GONE
+                databases_container.visibility = View.VISIBLE
+                databases_tree_hint.setText(R.string.databases_tree_title)
+
+                databases_tree.setAdapter(DatabasesAdapter(this).apply {
+                    databases = databaseItems
+                })
+            }
         }
     }
 }
