@@ -15,4 +15,10 @@ class DatabaseParser(val context: Context) {
                 DatabaseItem(database, tables)
             }
     }
+
+    fun loadTable(database: String, table: String): List<List<String>>? {
+        val sqliteWrapper = SqliteWrapper(context)
+        val resultWrapper = sqliteWrapper.execute(database, "SELECT * FROM $table")
+        return resultWrapper?.result as? List<List<String>>
+    }
 }

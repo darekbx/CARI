@@ -29,7 +29,7 @@ class DatabasesAdapter(val context: Context) : BaseExpandableListAdapter() {
 
     override fun isEmpty() = databases.isEmpty()
 
-    override fun isChildSelectable(groupPosition: Int, childPosition: Int) = false
+    override fun isChildSelectable(groupPosition: Int, childPosition: Int) = true
 
     override fun getGroupView(
         groupPosition: Int,
