@@ -39,7 +39,7 @@ class PreferencesAdapter(val context: Context) : BaseExpandableListAdapter() {
     ): View {
         val view = convertView ?: inflater.inflate(R.layout.adapter_preferences_scope, null)
         val scope = getGroup(groupPosition)
-        view.findViewById<TextView>(R.id.scope_items_count).setText("[${scope.items.size}]")
+        view.findViewById<TextView>(R.id.scope_items_count).setText("(${scope.items.size})")
         view.findViewById<TextView>(R.id.scope_name).setText(scope.scopeName)
         return view
     }

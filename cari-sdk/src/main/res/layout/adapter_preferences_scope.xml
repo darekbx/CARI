@@ -4,27 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#1999">
-    <TextView
-        android:id="@+id/scope_items_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:typeface="monospace"
-        android:textColor="#111"
-        android:padding="4dp"
-        android:layout_marginStart="30dp"
-        tools:text="[5]"
-        />
-    <TextView
-        android:id="@+id/scope_name"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:lines="1"
-        android:typeface="monospace"
-        android:textColor="#111"
-        android:padding="4dp"
-        tools:text="MainApplication"
-        android:ellipsize="end"
-        />
+        android:layout_height="34dp"
+        android:layout_margin="@dimen/padding_small"
+        android:background="@color/white"
+        android:elevation="4dp">
+        <FrameLayout
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:background="@color/red"
+            />
+        <TextView
+            android:id="@+id/scope_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:padding="@dimen/padding_small"
+            tools:text="MainApplication"
+            style="@style/ScopeItem"
+            />
+        <TextView
+            android:id="@+id/scope_items_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="@dimen/padding_small"
+            android:layout_marginStart="@dimen/padding_small"
+            tools:text="(5)"
+            style="@style/ScopeItem"
+            />
+    </LinearLayout>
 </LinearLayout>

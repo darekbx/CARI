@@ -4,4 +4,21 @@
         <item name="android:backgroundTint">#607D8B</item>
         <item name="android:typeface">monospace</item>
     </style>
+    <style name="ItemValue">
+        <item name="android:typeface">monospace</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:lines">1</item>
+        <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="ItemKey" parent="ItemValue">
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="ScopeItem">
+        <item name="android:lines">1</item>
+        <item name="android:typeface">monospace</item>
+        <item name="android:textSize">@dimen/text_medium</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:ellipsize">end</item>
+    </style>
 </resources>

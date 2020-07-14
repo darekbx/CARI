@@ -1,7 +1,6 @@
 package com.darekbx.cari.sdk.internal.bubble
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
@@ -12,7 +11,6 @@ import com.darekbx.cari.sdk.internal.bubble.database.DatabasesAdapter
 import com.darekbx.cari.sdk.internal.bubble.database.model.DatabaseItem
 import com.darekbx.cari.sdk.internal.bubble.preferences.PreferencesAdapter
 import com.darekbx.cari.sdk.internal.bubble.preferences.PreferencesParser
-import com.darekbx.cari.sdk.internal.bubble.preferences.model.PreferenceScope
 import kotlinx.android.synthetic.main.activity_bubble.*
 
 class BubbleActivity : Activity() {
@@ -54,7 +52,8 @@ class BubbleActivity : Activity() {
                 preferences_container.visibility = View.GONE
                 databases_container.visibility = View.VISIBLE
                 databases_tree_hint.setText(R.string.databases_tree_title)
-                databases_tree.setOnChildClickListener(object : ExpandableListView.OnChildClickListener {
+                databases_tree.setOnChildClickListener(object :
+                    ExpandableListView.OnChildClickListener {
                     override fun onChildClick(
                         parent: ExpandableListView?,
                         v: View?,
@@ -86,16 +85,14 @@ class BubbleActivity : Activity() {
                 // TODO: Display dialog with table contents?
 
             }
-        }
+        }.execute()
     }
 
     private fun loadPreferences() {
-        object : AsyncTask<Void, Void, List<PreferenceScope>>() {
+        Thread().run {
+            val result = PreferencesParser(this@BubbleActivity).parse()
 
-            override fun doInBackground(vararg params: Void?) =
-                PreferencesParser(this@BubbleActivity).parse()
-
-            override fun onPostExecute(result: List<PreferenceScope>?) {
+            preferences_tree?.post {
                 databases_container.visibility = View.GONE
                 preferences_container.visibility = View.VISIBLE
                 preferences_tree_hint.setText(R.string.preferences_tree_title)
@@ -106,6 +103,6 @@ class BubbleActivity : Activity() {
                     })
                 }
             }
-        }.execute()
+        }
     }
 }

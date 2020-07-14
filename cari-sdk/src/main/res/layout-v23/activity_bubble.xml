@@ -29,7 +29,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="Prefrences > Scope"
-                android:typeface="monospace"
+                android:textSize="16sp"
+                android:textColor="@color/text_color"
                 android:padding="8dp"
                 />
             <View
@@ -42,6 +43,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@color/white"
+                android:dividerHeight="0dp"
+                android:divider="@android:color/transparent"
+                android:groupIndicator="@android:color/transparent"
                 />
         </LinearLayout>
 

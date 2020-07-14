@@ -22,7 +22,7 @@ class BubbleNotification(val context: Context) {
 
             val bubbleData = Notification.BubbleMetadata.Builder()
                 .setDesiredHeight(BUBBLE_VIEW_HEIGHT)
-                .setIcon(Icon.createWithResource(context, R.drawable.ic_tree))
+                .setIcon(Icon.createWithResource(context, R.drawable.ic_bubble))
                 .setIntent(bubbleIntent)
                 .build()
 
@@ -34,7 +34,7 @@ class BubbleNotification(val context: Context) {
 
             val builder = Notification.Builder(context, CHANNEL_ID)
                 .setContentIntent(bubbleIntent)
-                .setSmallIcon(R.drawable.ic_arrow_back)
+                .setSmallIcon(R.drawable.ic_bubble)
                 .setBubbleMetadata(bubbleData)
                 .addPerson(chatBot)
 

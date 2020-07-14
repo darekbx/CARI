@@ -1,33 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/item_key"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:typeface="monospace"
-        android:textColor="#111"
-        android:textStyle="bold"
-        android:lines="1"
-        android:textSize="11sp"
-        android:padding="4dp"
-        android:ellipsize="end"
-        tools:text="key"
-        />
-    <TextView
-        android:id="@+id/item_value"
+    <LinearLayout
+        android:id="@+id/item_card"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:lines="1"
-        android:typeface="monospace"
-        android:textColor="#111"
-        android:textSize="11sp"
-        android:padding="4dp"
-        tools:text="50"
-        android:ellipsize="end"
-        />
-</LinearLayout>
+        android:layout_height="34dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/padding_small"
+        android:layout_marginBottom="@dimen/padding_small"
+        android:layout_marginEnd="@dimen/padding_small"
+        android:background="@color/white"
+        android:elevation="6dp">
+        <FrameLayout
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:background="@color/blue"
+            />
+        <TextView
+            android:id="@+id/item_key"
+            android:layout_width="140dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="@dimen/padding_small"
+            tools:text="key"
+            style="@style/ItemKey"
+            />
+        <TextView
+            android:id="@+id/item_value"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:padding="@dimen/padding_small"
+            tools:text="50"
+            />
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="2dp"
+            android:gravity="center_vertical"
+            android:src="@drawable/ic_edit"
+            android:scaleType="centerInside"
+            android:alpha="1"
+            />
+    </LinearLayout>
+</FrameLayout>
