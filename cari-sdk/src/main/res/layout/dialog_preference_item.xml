@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/preferences_item_key"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Prefrences > Scope"
+        android:textSize="16sp"
+        android:textColor="@color/text_color"
+        android:padding="@dimen/padding_large"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#666"
+        />
+    <TextView
+        android:id="@+id/preferences_type_notification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="@string/nofitication_string_set"
+        android:layout_marginStart="@dimen/padding_large"
+        android:layout_marginTop="@dimen/padding_medium"
+        />
+    <EditText
+        android:id="@+id/preferences_item_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_small"
+        android:layout_marginStart="@dimen/padding_large"
+        android:layout_marginEnd="@dimen/padding_large"
+        android:layout_marginBottom="@dimen/padding_large"
+        android:lines="3"
+        android:padding="@dimen/padding_small"
+        android:gravity="top"
+        tools:text="Value"
+        android:background="#F6F6F6"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="@dimen/padding_large"
+        android:layout_marginBottom="@dimen/padding_large"
+        android:layout_marginEnd="@dimen/padding_large">
+        <Button
+            android:id="@+id/button_database"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_cancel"
+            style="@style/DefaultButton"
+            />
+        <Button
+            android:id="@+id/button_preferences"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_save"
+            style="@style/DefaultButton"
+            />
+    </LinearLayout>
+
+</LinearLayout>

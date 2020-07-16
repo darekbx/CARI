@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.TextView
 import com.darekbx.cari.R
+import com.darekbx.cari.sdk.internal.bubble.preferences.model.PreferenceItem
 import com.darekbx.cari.sdk.internal.bubble.preferences.model.PreferenceScope
 
 class PreferencesAdapter(val context: Context) : BaseExpandableListAdapter() {
+
+    var onItemEdit : ((PreferenceItem) -> Unit)? = null
 
     var scopes: List<PreferenceScope> = emptyList()
 
@@ -55,6 +58,7 @@ class PreferencesAdapter(val context: Context) : BaseExpandableListAdapter() {
         val item = getChild(groupPosition, childPosition)
         view.findViewById<TextView>(R.id.item_key).setText(item.key)
         view.findViewById<TextView>(R.id.item_value).setText("${item.value}")
+        view.findViewById<View>(R.id.item_edit).setOnClickListener { onItemEdit?.invoke(item) }
         return view
     }
 

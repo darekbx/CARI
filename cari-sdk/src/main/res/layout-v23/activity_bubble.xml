@@ -31,7 +31,7 @@
                 tools:text="Prefrences > Scope"
                 android:textSize="16sp"
                 android:textColor="@color/text_color"
-                android:padding="8dp"
+                android:padding="16dp"
                 />
             <View
                 android:layout_width="match_parent"
@@ -87,7 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Database"
+            android:text="@string/databases_tree_title"
             style="@style/DefaultButton"
             />
         <Button
@@ -95,7 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Preferences"
+            android:text="@string/preferences_tree_title"
             style="@style/DefaultButton"
             />
     </LinearLayout>

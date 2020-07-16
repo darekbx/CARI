@@ -9,8 +9,10 @@ import com.darekbx.cari.R
 import com.darekbx.cari.sdk.internal.bubble.database.DatabaseParser
 import com.darekbx.cari.sdk.internal.bubble.database.DatabasesAdapter
 import com.darekbx.cari.sdk.internal.bubble.database.model.DatabaseItem
+import com.darekbx.cari.sdk.internal.bubble.preferences.PreferenceItemDialog
 import com.darekbx.cari.sdk.internal.bubble.preferences.PreferencesAdapter
 import com.darekbx.cari.sdk.internal.bubble.preferences.PreferencesParser
+import com.darekbx.cari.sdk.internal.bubble.preferences.model.PreferenceItem
 import kotlinx.android.synthetic.main.activity_bubble.*
 
 class BubbleActivity : Activity() {
@@ -100,9 +102,14 @@ class BubbleActivity : Activity() {
                 result?.let {
                     preferences_tree.setAdapter(PreferencesAdapter(this@BubbleActivity).apply {
                         scopes = result
+                        onItemEdit = { preferenceItem -> editPreferenceItem(preferenceItem) }
                     })
                 }
             }
         }
+    }
+
+    private fun editPreferenceItem(preferenceItem: PreferenceItem) {
+        PreferenceItemDialog(this, preferenceItem).show()
     }
 }

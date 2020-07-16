@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/padding_small"
+    android:paddingStart="@dimen/padding_small"
+    android:paddingEnd="@dimen/padding_small">
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -16,6 +19,7 @@
             android:layout_width="4dp"
             android:layout_height="match_parent"
             android:background="@color/red"
+            android:paddingEnd="@dimen/padding_small"
             />
         <TextView
             android:id="@+id/scope_name"
