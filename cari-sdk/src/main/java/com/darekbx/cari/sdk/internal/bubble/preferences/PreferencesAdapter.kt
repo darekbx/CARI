@@ -12,7 +12,7 @@ import com.darekbx.cari.sdk.internal.bubble.preferences.model.PreferenceScope
 
 class PreferencesAdapter(val context: Context) : BaseExpandableListAdapter() {
 
-    var onItemEdit : ((PreferenceItem) -> Unit)? = null
+    var onItemEdit : ((String, PreferenceItem) -> Unit)? = null
 
     var scopes: List<PreferenceScope> = emptyList()
 
@@ -55,10 +55,11 @@ class PreferencesAdapter(val context: Context) : BaseExpandableListAdapter() {
         parent: ViewGroup?
     ): View {
         val view = convertView ?: inflater.inflate(R.layout.adapter_preferences_item, null)
+        val scope = getGroup(groupPosition)
         val item = getChild(groupPosition, childPosition)
         view.findViewById<TextView>(R.id.item_key).setText(item.key)
         view.findViewById<TextView>(R.id.item_value).setText("${item.value}")
-        view.findViewById<View>(R.id.item_edit).setOnClickListener { onItemEdit?.invoke(item) }
+        view.findViewById<View>(R.id.item_edit).setOnClickListener { onItemEdit?.invoke(scope.scopeName, item) }
         return view
     }
 

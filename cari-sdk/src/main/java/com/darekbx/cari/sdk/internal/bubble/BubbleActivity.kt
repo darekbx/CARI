@@ -102,14 +102,22 @@ class BubbleActivity : Activity() {
                 result?.let {
                     preferences_tree.setAdapter(PreferencesAdapter(this@BubbleActivity).apply {
                         scopes = result
-                        onItemEdit = { preferenceItem -> editPreferenceItem(preferenceItem) }
+                        onItemEdit = { scope, preferenceItem -> editPreferenceItem(scope, preferenceItem) }
                     })
                 }
             }
         }
     }
 
-    private fun editPreferenceItem(preferenceItem: PreferenceItem) {
-        PreferenceItemDialog(this, preferenceItem).show()
+    private fun editPreferenceItem(scope: String, preferenceItem: PreferenceItem) {
+        PreferenceItemDialog(this, scope, preferenceItem).apply {
+            valueChanged = { refreshPreference(preferenceItem) }
+        }.show()
+    }
+
+    private fun refreshPreference(preferenceItem: PreferenceItem) {
+
+        // TODO: refresh changed value on the preference list, refresh single row
+
     }
 }

@@ -51,7 +51,7 @@
         android:layout_marginBottom="@dimen/padding_large"
         android:layout_marginEnd="@dimen/padding_large">
         <Button
-            android:id="@+id/button_database"
+            android:id="@+id/button_cancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -59,7 +59,7 @@
             style="@style/DefaultButton"
             />
         <Button
-            android:id="@+id/button_preferences"
+            android:id="@+id/button_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

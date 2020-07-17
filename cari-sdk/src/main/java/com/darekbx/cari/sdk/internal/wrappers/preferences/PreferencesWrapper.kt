@@ -55,7 +55,7 @@ internal class PreferencesWrapper(val context: Context) {
         preferences.edit().putString(key, value).commit()
     }
 
-    private fun providePreferences(scope: String): SharedPreferences {
+    fun providePreferences(scope: String): SharedPreferences {
         return context.getSharedPreferences(scope, Context.MODE_PRIVATE)
     }
 }

@@ -6,10 +6,12 @@
     <string name="databases_tree_title">Databases</string>
     <string name="button_save">Save</string>
     <string name="button_cancel">Cancel</string>
-    <string name="nofitication_boolean">Value type is a Boolean, please set True or False</string>
+    <string name="nofitication_boolean">Value type is a Boolean, please set true or false</string>
     <string name="nofitication_int">Value type is a Integer</string>
     <string name="nofitication_long">Value type is a Long</string>
     <string name="nofitication_float">Value type is a Float</string>
     <string name="nofitication_string">Value type is a String</string>
     <string name="nofitication_string_set">Value type is a StringSet, separate chunks with comma</string>
+    <string name="nofitication_empty"></string>
+    <string name="nofitication_error">Provided value is in wrong format</string>
 </resources>
