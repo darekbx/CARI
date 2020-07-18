@@ -111,13 +111,16 @@ class BubbleActivity : Activity() {
 
     private fun editPreferenceItem(scope: String, preferenceItem: PreferenceItem) {
         PreferenceItemDialog(this, scope, preferenceItem).apply {
-            valueChanged = { refreshPreference(preferenceItem) }
+            valueChanged = { refreshPreference(scope, preferenceItem) }
         }.show()
     }
 
-    private fun refreshPreference(preferenceItem: PreferenceItem) {
+    private fun refreshPreference(scope: String, preferenceItem: PreferenceItem) {
 
         // TODO: refresh changed value on the preference list, refresh single row
+
+        val adapter = preferences_tree.expandableListAdapter as PreferencesAdapter
+        adapter.notifyDataSetInvalidated()
 
     }
 }

@@ -42,32 +42,38 @@ class PreferenceItemDialog(
             preferenceItem.value is Int -> {
                 newValue.toIntOrNull()?.let {
                     editor.putInt(preferenceItem.key, it)
+                    preferenceItem.value = it
                     true
                 } ?: false
             }
             preferenceItem.value is Boolean -> {
                 editor.putBoolean(preferenceItem.key, newValue.toBoolean())
+                preferenceItem.value = newValue.toBoolean()
                 true
             }
             preferenceItem.value is Float -> {
                 newValue.toFloatOrNull()?.let {
                     editor.putFloat(preferenceItem.key, it)
+                    preferenceItem.value = it
                     true
                 } ?: false
             }
             preferenceItem.value is Long -> {
                 newValue.toLongOrNull()?.let {
                     editor.putLong(preferenceItem.key, it)
+                    preferenceItem.value = it
                     true
                 } ?: false
             }
             preferenceItem.value is String -> {
                 editor.putString(preferenceItem.key, newValue)
+                preferenceItem.value = newValue
                 true
             }
             preferenceItem.value is Set<*> -> {
                 val chunks = newValue.removePrefix("[").removeSuffix("]").split(",").toSet()
                 editor.putStringSet(preferenceItem.key, chunks)
+                preferenceItem.value = chunks
                 true
             }
             else -> false
