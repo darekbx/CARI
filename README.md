@@ -84,6 +84,10 @@ Connect Android device to the computer, and wait till device is ready, then run:
       }
   }
   ```
+  4. Add **INTERNET** permission to **AndroidManifest.xml** file:
+  ```xml
+  <uses-permission android:name="android.permission.INTERNET" />
+  ```
 
 <br />
 
